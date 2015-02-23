@@ -2,7 +2,7 @@
 void setup() {
 
   // setup plot
-  size(900,400);
+  size(450,270);
   background(255);
   PFont f = createFont("Arial",16,true);
   textFont(f, 16);
@@ -43,15 +43,15 @@ void setup() {
   // transform to plot
   //float[][] plt1 = shift_and_scale(plotdata1, 20, 90, 0.9, 1);
  // float[][] plt2 = shift_and_scale(plotdata2, 270, 90, 0.9, 1);
-  float[][] plt3 = shift_and_scale(plotdata3, 20, 90, 0.9, 1);
-  float[][] plt4 = shift_and_scale(plotdata4, 270, 90, 0.9, 1);
+  float[][] plt3 = shift_and_scale(plotdata3, 20, 100, 0.9, 1);
+  float[][] plt4 = shift_and_scale(plotdata4, 270, 100, 0.9, 1);
   /* float[][] plt5 = shift_and_scale(plotdata5, 20, 290, 0.9, 1);
   float[][] plt6 = shift_and_scale(plotdata6, 260, 290, 0.9, 1);
   float[][] plt7 = shift_and_scale(plotdata7, 500, 290, 0.9, 1);
   float[][] plt8 = shift_and_scale(plotdata8, 740, 290, 0.9, 1);*/
 
   // plot data
-  float[][][] plot_data = {plt1, plt2}; //, plt3, plt4}; //, plt5, plt6, plt7, plt8};
+  float[][][] plot_data = {plt3, plt4}; //, plt3, plt4}; //, plt5, plt6, plt7, plt8};
   for (float[][] plt: plot_data) {
     // line(plt[0][0]-20, plt[0][1], plt[0][0], plt[0][1]);
     for (int i=0; i<plt.length-1; i++) {
@@ -63,11 +63,14 @@ void setup() {
   // text ("Regular spiking (RS)", 20, 20);
   // text ("Intrinsically bursting (IB)", 240, 20);
   text ("Chattering (CH)", 20, 20);
-  text ("Fast spiking (FS)", 240, 20);
+  text ("Fast spiking (FS)", 250, 20);
   // text ("Thalamo-cortical (TC)", 20, 210);
   // text ("Thalamo-cortical (TC)", 240, 210);
-  text ("Resonator (RZ)", 460, 210);
-  text ("low-threshold spiking (LTS)", 680, 210);
+  // text ("Resonator (RZ)", 460, 210);
+  // text ("low-threshold spiking (LTS)", 680, 210);
+  
+  text("a=0.02, b=0.2\nc=-50, d=1.2\nnr of spikes=26", 40, 200);
+  text("a=0.1, b=0.2\nc=-65, d=2\nnr of spikes=26", 270, 200);
 
   save("Izhikevich1.jpg");
 
