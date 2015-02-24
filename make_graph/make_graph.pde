@@ -14,7 +14,7 @@ void setup() {
   Neuron n3 = new Neuron(0.02, 0.2, -50, 2);    // chattering
   Neuron n4 = new Neuron(0.1, 0.2, -65, 2);     // fast-spiking
   Neuron n5 = new Neuron(0.02, 0.25, -65, 0.05);     // thalamo-cortical
-  Neuron n6 = new Neuron(0.1, 0.23, -65, 2);     // resonator
+  Neuron n6 = new Neuron(0.1, 0.23, -65, -1);     // resonator
   Neuron n7 = new Neuron(0.02, 0.25, -65, 2);   // low-threshold spiking
 
   // create data arrays with their behaviour
@@ -23,11 +23,11 @@ void setup() {
   float[][] plotdata3 = n3.show_spike_behaviour(10, 2000);
   float[][] plotdata4 = n4.show_spike_behaviour(10, 2000);
 
-  n5.show_spike_behaviour(0, 100); float[][] plotdata5 = n5.show_spike_behaviour(10, 2000);
+  n5.show_spike_behaviour(0, 100); float[][] plotdata5 = n5.show_spike_behaviour(1, 2000);
 
-  float[][] n6plt1 = n6.show_spike_behaviour(10, 900);
-  float[][] n6plt2 = n6.show_spike_behaviour(15, 100);
-  float[][] n6plt3 = n6.show_spike_behaviour(10, 1000);
+  float[][] n6plt1 = n6.show_spike_behaviour(1.5, 900);
+  float[][] n6plt2 = n6.show_spike_behaviour(3, 100);
+  float[][] n6plt3 = n6.show_spike_behaviour(1.5, 1000);
 
   float[][] plotdata8 = n7.show_spike_behaviour(10, 2000);
 
@@ -91,7 +91,7 @@ void setup() {
   // text("a=0.02, b=0.2\nc=-50, d=1.2\nnr of spikes=26", 40, 200);
   // text("a=0.1, b=0.2\nc=-65, d=2\nnr of spikes=26", 270, 200);
 
-  save("Izhikevich_replication_attempt1.jpg");
+  save("Izhikevich_replication.jpg");
 
 }
 
