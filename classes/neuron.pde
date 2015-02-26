@@ -1,6 +1,5 @@
 // class representing a neuron
 
-
 class Neuron {
   // Class representing a neuron
   float a, b, c, d;
@@ -11,6 +10,10 @@ class Neuron {
 
   int neighbours[];     // indices pointing to the neighbours of the neuron
   int weights[];        // weights to the neighbours
+
+  int x;        // x coordinate for displaying neuron
+  int y;        // y coordinate for displaying neuron
+  int Nw;       // Neuron width
 
   // Constructor
   Neuron(float a, float b, float c, float d) {
@@ -79,5 +82,25 @@ class Neuron {
     // Set v to a certain value
     this.v = v;
   }
-  
+
+  void display() {
+    // I should probably make this a little more elaborate later on
+    
+    fill((int)(256*((v-40)/-120.0)),(int)(256*(1.0-((v-40)/-120.0))),0); // set colour
+    rect(x, y, Nw-2, Nw-2);       // create rectangle
+  }
+
+  boolean pointedAt() {
+    // return whether the mouse is pointed at the neuron
+
+    if (mouseX>x && mouseX<x+Nw && mouseY>y && mouseY<y+Nw) return true;
+    else return false;
+  }
+    /*
+  void update() {
+    for (int i=0
+  }
+  */
+
+
 }
