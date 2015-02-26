@@ -10,12 +10,15 @@ class NeuralNetwork {
   float maxWeight;  // maximal weight between two neurons
   
   Neuron neurons[];     // the neurons forming the network
+  int[] indices;
 
   NeuralNetwork(Neuron[] neurons) {
     // construct network from an array of neurons
 
     this.Nn = neurons.length;
     this.neurons = neurons;
+    indices = new int[Nn];
+    for (int i=0; i<Nn; i++) indices[i] = i;
 
   }
 
@@ -43,5 +46,32 @@ class NeuralNetwork {
       neurons[i].display();
     }
   }
+
+  void update() {
+    // update the network
+
+    randomiseArray(indices);    // randomise update order
+    for (int i=0; i<Nn; i++) {
+      int j = indices[i];
+      neurons[j].update();
+    }
+
+    // I wonder whether this makes a difference, as I only set
+    // the neurons to 'fire' a round later.
+    // Does the randomiseArray make a difference in this case?
+  }
+
+  void randomiseArray(int[] ar) {
+    // Fisher-Yates shuffle
+    
+    int l = ar.length;      // store length of input array
+    for (int i=l-1; i>0; i--) {
+      int index=int(random(i+1));
+      int next = ar[index];
+      ar[index] = ar[i];
+      ar[i] = next;
+    }
+  }
+
 
 }
