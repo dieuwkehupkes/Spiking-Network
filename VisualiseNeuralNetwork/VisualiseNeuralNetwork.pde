@@ -42,3 +42,8 @@ void mousePressed() {
 void mouseReleased() {
   mouseP = false;
 }
+
+void keyPressed() {
+  // specify what happens when a key is pressed
+  // not implemented yet
+}
