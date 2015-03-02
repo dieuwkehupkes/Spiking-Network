@@ -46,4 +46,5 @@ void mouseReleased() {
 void keyPressed() {
   // specify what happens when a key is pressed
   // not implemented yet
+  if (key=='q' || key=='Q') exit();
 }
