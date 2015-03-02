@@ -10,7 +10,7 @@ class Neuron {
 
   NeuralNetwork network;    // the network the neuron is part of
   int neighbours[];     // indices pointing to the neighbours of the neuron
-  int weights[];        // weights to the neighbours
+  float weights[];        // weights to the neighbours
   int numNeighbours=0;
 
   int x;        // x coordinate for displaying neuron
@@ -40,21 +40,6 @@ class Neuron {
     d=8-6*pow(re,2);
 
     reset();
-  }
-
-
-  private void reset() {
-    // reset neuron and time
-    v = c;
-    u = b*c;
-  }
-
-  public void setParameters(float a, float b, float c, float d) {
-    // change parameters a, b, c and d of the network
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
   }
 
 
@@ -124,16 +109,6 @@ class Neuron {
     computeNext(inputActivation);
   }
 
-  public void resetI() {
-    // Reset the input variable I to its standard value
-    this.I = 0;
-  }
-
-  public void setI(float activation) {
-    // increase I with activation
-    this.I = activation;
-  }
-
   private float computeNeighbourActivation() {
     // Compute the activation the neuron gets from its
     // neighbours
@@ -144,12 +119,6 @@ class Neuron {
     }
 
     return neighbourActivation;
-  }
-
-
-  public void set_v(float v) {
-    // Set v to a certain value
-    this.v = v;
   }
 
   public void display() {
@@ -164,6 +133,42 @@ class Neuron {
 
     if (mouseX>x && mouseX<x+Nw && mouseY>y && mouseY<y+Nw) return true;
     else return false;
+  }
+
+  private void reset() {
+    // reset neuron and time
+    v = c;
+    u = b*c;
+  }
+
+  public void resetI() {
+    // Reset the input variable I to its standard value
+    this.I = 0;
+  }
+
+  public void removeConnections() {
+    // reset any existing weights from the
+    // neuron to other neurons
+    this.weights = new float[0];
+    this.neighbours = new int[0];
+  }
+
+  public void setI(float activation) {
+    // increase I with activation
+    this.I = activation;
+  }
+
+  public void set_v(float v) {
+    // Set v to a certain value
+    this.v = v;
+  }
+
+  public void setParameters(float a, float b, float c, float d) {
+    // change parameters a, b, c and d of the network
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
   }
 
 }

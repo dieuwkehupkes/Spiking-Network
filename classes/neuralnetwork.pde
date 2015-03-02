@@ -45,7 +45,7 @@ class NeuralNetwork {
     }
   }
 
-  void mousePressed(int x, int y) {
+  public void mousePressed(int x, int y) {
     // when the mouse is pressed, give the neuron
     // it is pointing at extra activation
     int neuronIndex = findNeuron(x, y);
@@ -53,7 +53,7 @@ class NeuralNetwork {
     neuron.setI(40);   // give activation to the neuron
   }
 
-  int findNeuron(float x, float y) {
+  private int findNeuron(float x, float y) {
     // find the neuron corresponding with input coordinates
     int column = int(x/Nw);
     int row = int(y/Nw);
@@ -94,6 +94,14 @@ class NeuralNetwork {
       int next = ar[index];
       ar[index] = ar[i];
       ar[i] = next;
+    }
+  }
+
+  void removeWeights() {
+    // Reset the weights between the neurons
+    // in the network to 0.
+    for (Neuron neuron : this.neurons) {
+      neuron.removeConnections();
     }
   }
 
