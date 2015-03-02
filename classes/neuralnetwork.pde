@@ -50,7 +50,7 @@ class NeuralNetwork {
     // it is pointing at extra activation
     int neuronIndex = findNeuron(x, y);
     Neuron neuron = neurons[neuronIndex];
-    neuron.increaseI(100);   // give activation to the neuron
+    neuron.setI(40);   // give activation to the neuron
   }
 
   int findNeuron(float x, float y) {

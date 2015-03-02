@@ -121,9 +121,9 @@ class Neuron {
     this.I = 0;
   }
 
-  public void increaseI(float activation) {
+  public void setI(float activation) {
     // increase I with activation
-    this.I += activation;
+    this.I = activation;
   }
 
   private float computeNeighbourActivation() {

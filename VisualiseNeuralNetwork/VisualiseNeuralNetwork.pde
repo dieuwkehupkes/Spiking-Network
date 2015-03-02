@@ -2,13 +2,14 @@
 int Nn=6000;
 int Ncol=120;
 int Nw=20;
+boolean mouseP =false;  // indicates whether mouse is pressed
 
 NeuralNetwork network;
 
 void setup() {
   size(1300, 900);
-  frameRate(20);    // Nb: frame rate doesn't correspond with
-                    // timestep in update, time is slowed down
+  frameRate(200);    // Nb: frame rate only corresponds with real time
+                     // when enough processing power is available
 
   Neuron[] n = new Neuron[Nn];
 
@@ -23,8 +24,9 @@ void setup() {
 
 void draw() {
 
-  // float I = 1;
+  float I = 0;
 
+  network.mousePressed(mouseX, mouseY);
   network.update();
   network.display();
 
@@ -33,5 +35,10 @@ void draw() {
 void mousePressed() {
   // when the mouse is pressed, give the neuron
   // it is pointing at extra activation
+  mouseP = true;
   network.mousePressed(mouseX, mouseY);
+}
+
+void mouseReleased() {
+  mouseP = false;
 }
