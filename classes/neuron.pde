@@ -153,6 +153,20 @@ class Neuron {
     this.neighbours = new int[0];
   }
 
+  public void setConnections(int[] connectTo, float[] weights) throws IllegalArgumentException {
+    // set weights to the list of neurons that is
+    // inputted
+
+    // check if input is valid
+    IllegalArgumentException unequalLengthException = new IllegalArgumentException("Number of neurons and number of weights should be equal");
+    if (connectTo.length != weights.length) {
+      throw unequalLengthException;
+    }
+
+    this.neighbours = connectTo;
+    this.weights = weights;
+  }
+
   public void setI(float activation) {
     // increase I with activation
     this.I = activation;
