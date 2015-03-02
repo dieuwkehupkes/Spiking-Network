@@ -2,7 +2,7 @@
 
 class Neuron {
   // Class representing a neuron
-  float a, b, c, d;
+  private float a, b, c, d;
   float u, v;        // u and v when they were last computed
   private float I;      // extrenal input to neuron
   boolean fired = false;
@@ -47,6 +47,14 @@ class Neuron {
     // reset neuron and time
     v = c;
     u = b*c;
+  }
+
+  public void setParameters(float a, float b, float c, float d) {
+    // change parameters a, b, c and d of the network
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
   }
 
 
