@@ -12,20 +12,24 @@ class NeuralNetwork {
   Neuron neurons[];     // the neurons forming the network
   int[] indices;
 
-  NeuralNetwork(Neuron[] neurons) {
+  NeuralNetwork(Neuron[] neurons, int Ncol, int Nw) {
     // construct network from an array of neurons
 
     this.Nn = neurons.length;
+    this.Ncol = Ncol;
+    this.Nw = Nw;
     this.neurons = neurons;
     indices = new int[Nn];
     for (int i=0; i<Nn; i++) indices[i] = i;
+    for (Neuron neuron: neurons) neuron.network = this;
+
+    setNeuronCoordinates(Ncol, Nw); // compute the coordinates for the neurons
 
   }
 
-  void display(int Ncol, int Nw) {
+  void display() {
     // Visualise the network on a grid 
     
-    setNeuronCoordinates(Ncol, Nw);     // compute coordinates for neurons
     displayNeurons();           // display neurons
   }
 
@@ -41,6 +45,22 @@ class NeuralNetwork {
     }
   }
 
+  void mousePressed(int x, int y) {
+    // when the mouse is pressed, give the neuron
+    // it is pointing at extra activation
+    int neuronIndex = findNeuron(x, y);
+    Neuron neuron = neurons[neuronIndex];
+    neuron.increaseI(100);   // give activation to the neuron
+  }
+
+  int findNeuron(float x, float y) {
+    // find the neuron corresponding with input coordinates
+    int column = int(x/Nw);
+    int row = int(y/Nw);
+    int neuronIndex = row*Ncol + column;
+    return neuronIndex;
+  }
+
   void displayNeurons() {
     for (int i=0; i<Nn; i++) {
       neurons[i].display();
@@ -48,12 +68,16 @@ class NeuralNetwork {
   }
 
   void update() {
+    update(0.0);
+  }
+
+  void update(float I) {
     // update the network
 
     randomiseArray(indices);    // randomise update order
     for (int i=0; i<Nn; i++) {
       int j = indices[i];
-      neurons[j].update();
+      neurons[j].update(I);
     }
 
     // I wonder whether this makes a difference, as I only set
@@ -72,6 +96,7 @@ class NeuralNetwork {
       ar[i] = next;
     }
   }
+
 
 
 }

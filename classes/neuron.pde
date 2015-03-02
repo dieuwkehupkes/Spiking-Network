@@ -3,7 +3,8 @@
 class Neuron {
   // Class representing a neuron
   float a, b, c, d;
-  float u, v, I;        // u and v when they were last computed
+  float u, v;        // u and v when they were last computed
+  private float I;      // extrenal input to neuron
   boolean fired = false;
   float timeStep = 0.1;
 
@@ -15,6 +16,8 @@ class Neuron {
   int x;        // x coordinate for displaying neuron
   int y;        // y coordinate for displaying neuron
   int Nw;       // Neuron width
+
+  boolean mousePointedAt; //set to true when the mouse is pointed at the neuron
 
   // Constructor1 generate neuron with specifief values
   Neuron(float a, float b, float c, float d) {
@@ -40,18 +43,15 @@ class Neuron {
   }
 
 
-  void reset() {
+  private void reset() {
     // reset neuron and time
     v = c;
     u = b*c;
-
   }
 
 
   float[][] show_spike_behaviour(float I, int nr_of_steps) {
     // Show behaviour of neuron as a result of a constant input current
-    // Isn't this a bit strange? How would a neuron receive a consistent
-    // input current.. anyhow
     
     float[][] time_potential = new float[nr_of_steps][2];     // declare array to store output
     int nr_of_spikes = 0;
@@ -64,7 +64,7 @@ class Neuron {
       time_potential[i][0] = cur_time;
       time_potential[i][1] = v;
       computeNext(I);
-      if (fired) {nr_of_spikes++;}
+      if (fired) nr_of_spikes++;
     }
 
     System.out.println(nr_of_spikes++);
@@ -78,11 +78,14 @@ class Neuron {
     this.timeStep = timeStep;
   }
 
-  void computeNext(float I) {
+  private void computeNext(float I) {
     // Compute the membrane potential one time step t from now.
     // Current input to the neuron is I.
 
     // if potential crosses threshold, reset
+
+    resetI();    // reset the input that was used to compute the update
+
     if (v>30) {
       v=c;
       u=u+d;
@@ -99,8 +102,9 @@ class Neuron {
 
   void update() {
     // update the neuron from the weights
-    I = computeNeighbourActivation();
-    computeNext(I);
+    float inputActivation = this.I + computeNeighbourActivation();
+    if (this.I > 0.0) System.out.println(this.I+" "+inputActivation);
+    computeNext(inputActivation);
   }
 
   void update(float thalamicInput) {
@@ -108,29 +112,39 @@ class Neuron {
     // thalamic input
     
     float neighbourActivation = computeNeighbourActivation();
-    I = thalamicInput + neighbourActivation;
-    computeNext(I);
+    float inputActivation = this.I + thalamicInput + neighbourActivation;
+    computeNext(inputActivation);
   }
 
-  float computeNeighbourActivation() {
+  public void resetI() {
+    // Reset the input variable I to its standard value
+    this.I = 0;
+  }
+
+  public void increaseI(float activation) {
+    // increase I with activation
+    this.I += activation;
+  }
+
+  private float computeNeighbourActivation() {
     // Compute the activation the neuron gets from its
     // neighbours
     
-    I = 0;      // reset I
-    for (int i=0; i<numNeighbours; i++){
-      if (network.neurons[neighbours[i]].fired) I+=weights[i];
+    float neighbourActivation = 0;
+    for (int i=0; i<numNeighbours; i++) {
+      if (network.neurons[neighbours[i]].fired) neighbourActivation+=weights[i];
     }
 
-    return I;
+    return neighbourActivation;
   }
 
 
-  void set_v(float v) {
+  public void set_v(float v) {
     // Set v to a certain value
     this.v = v;
   }
 
-  void display() {
+  public void display() {
     // I should probably make this a little more elaborate later on
     
     fill((int)(256*((v-40)/-120.0)),(int)(256*(1.0-((v-40)/-120.0))),0); // set colour
@@ -143,11 +157,7 @@ class Neuron {
     if (mouseX>x && mouseX<x+Nw && mouseY>y && mouseY<y+Nw) return true;
     else return false;
   }
-    /*
-  void update() {
-    for (int i=0
-  }
-  */
-
 
 }
+
+
