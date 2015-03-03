@@ -9,7 +9,7 @@ void setup() {
   fill(0);
 
   // create neurons
-  ExcitatoryNeuron n1 = new ExcitatoryNeuron(0.02, 0.2, -65, 8);    // regular spiking
+  RegularSpikingNeuron n1 = new RegularSpikingNeuron();    // regular spiking
   ExcitatoryNeuron n2 = new ExcitatoryNeuron(0.02, 0.2, -55, 4);    // intrinsically bursting
   ExcitatoryNeuron n3 = new ExcitatoryNeuron(0.02, 0.2, -50, 2);    // chattering
   FastSpikingNeuron n4 = new FastSpikingNeuron();     // fast-spiking
