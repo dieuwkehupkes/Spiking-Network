@@ -18,6 +18,11 @@ void setup() {
   }
 
   network = new NeuralNetwork(n, Ncol, Nw);
+  
+  int[] connectedTo = {1, 2, 3, 4, 5, 6};
+  float[] w = {100, 400, 5, 9, 8, 10};
+  
+  network.neurons[0].setConnections(connectedTo, w);
   network.display();
   
 }
@@ -26,7 +31,7 @@ void draw() {
 
   float I = 0;
 
-  network.mousePressed(mouseX, mouseY);
+  if (mouseP) network.mousePressed(mouseX, mouseY);
   network.update();
   network.display();
 

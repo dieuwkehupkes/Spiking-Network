@@ -82,7 +82,7 @@ class Neuron {
     if (v>30) {
       v=c;
       u=u+d;
-      fired = true;
+      this.fired = true;
       return;
     }
 
@@ -146,6 +146,14 @@ class Neuron {
     this.I = 0;
   }
 
+  public void printConnections() {
+    // print the connections of the neurons and their weights
+
+    for (int i=0; i<numNeighbours; i++) {
+      System.out.println(neighbours[i] + "\t" + weights[i]);
+    }
+  }
+
   public void removeConnections() {
     // reset any existing weights from the
     // neuron to other neurons
@@ -165,6 +173,7 @@ class Neuron {
 
     this.neighbours = connectTo;
     this.weights = weights;
+    this.numNeighbours = neighbours.length;
   }
 
   public void setI(float activation) {
@@ -186,5 +195,3 @@ class Neuron {
   }
 
 }
-
-
