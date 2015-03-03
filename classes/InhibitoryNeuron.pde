@@ -21,6 +21,7 @@ public class InhibitoryNeuron extends Neuron {
 
     // set parameters
     setParams(a, b, c, d);
+    super.reset();
   }
 
   // constructor with specified parameters
@@ -41,6 +42,7 @@ public class InhibitoryNeuron extends Neuron {
 
     // set parameters
     setParams(a, b, c, d);
+    super.reset();
 
   }
 
