@@ -17,29 +17,14 @@ class Neuron {
   int y;        // y coordinate for displaying neuron
   int Nw;       // Neuron width
 
-  boolean mousePointedAt; //set to true when the mouse is pointed at the neuron
-
-  // Constructor1 generate neuron with specifief values
+  
+  // Constructor
   Neuron(float a, float b, float c, float d) {
     // Initialise neuron parameters
     setParams(a, b, c, d);
-
-    // Set inital values of neuron
     reset();
   }
 
-  // Constructor2 generate random excitatory neuron
-  Neuron() {
-    /*
-    float re=random(0.1,1.0);
-    a=0.02;
-    b=0.2;
-    c=-65+15*pow(re,2);
-    d=8-6*pow(re,2);
-
-    reset();
-    */
-  }
 
   public void setParams(float a, float b, float c, float d) {
     // set parameters of the neuron

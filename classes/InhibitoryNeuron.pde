@@ -10,25 +10,14 @@ public class InhibitoryNeuron extends Neuron {
   // random parameters
   public InhibitoryNeuron() {
     // call constructor super
-    super();
-
-    // generate parameters
-    float ri=random(1.0);
-    float a = 0.02+0.08*ri;
-    float b = 0.25-0.05*ri;
-    float c = -65;
-    float d = 2;
-
-    // set parameters
-    setParams(a, b, c, d);
-    super.reset();
+    super(0.02+0.08*random(1.0), 0.25-0.05*random(1.0), -65, 2);
   }
 
   // constructor with specified parameters
   public InhibitoryNeuron(float a, float b, float c, float d) {
     
-    // initialise empty neuron
-    super();
+    // call constructor super
+    super(a, b, c, d);
 
     // check if parameters are within the range of inhibitory neurons
     IllegalArgumentException wrongRangeExceptionA = new IllegalArgumentException("Parameter a outside range of inhibitory neuron.");
@@ -39,10 +28,6 @@ public class InhibitoryNeuron extends Neuron {
     if (b < 0.2 || b > 0.3) throw wrongRangeExceptionB;
     if (c != -65) throw wrongRangeExceptionC;
     if (d != 2) throw wrongRangeExceptionD;
-
-    // set parameters
-    setParams(a, b, c, d);
-    super.reset();
 
   }
 

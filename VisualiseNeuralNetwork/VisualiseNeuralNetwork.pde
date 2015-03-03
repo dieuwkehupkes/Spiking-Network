@@ -11,10 +11,10 @@ void setup() {
   frameRate(200);    // Nb: frame rate only corresponds with real time
                      // when enough processing power is available
 
-  Neuron[] n = new Neuron[Nn];
+  ExcitatoryNeuron[] n = new ExcitatoryNeuron[Nn];
 
   for (int i=0; i<Nn; i++) {
-    n[i] = new Neuron();
+    n[i] = new ExcitatoryNeuron();
   }
 
   network = new NeuralNetwork(n, Ncol, Nw);
