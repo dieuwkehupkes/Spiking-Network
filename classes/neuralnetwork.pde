@@ -39,8 +39,8 @@ class NeuralNetwork {
     // columns and the neuron width
     
     for (int i=0; i<Nn; i++) {
-      neurons[i].x = (i%Ncol)*Nw;
-      neurons[i].y = (int(i/Ncol))*Nw;
+      neurons[i].x = (i%Ncol)*Nw + 5;
+      neurons[i].y = (int(i/Ncol))*Nw + 5;
       neurons[i].Nw = Nw;
     }
   }
@@ -61,17 +61,17 @@ class NeuralNetwork {
     return neuronIndex;
   }
 
-  void displayNeurons() {
+  public void displayNeurons() {
     for (int i=0; i<Nn; i++) {
       neurons[i].display();
     }
   }
 
-  void update() {
+  public void update() {
     update(0.0);
   }
 
-  void update(float I) {
+  public void update(float I) {
     // update the network
 
     randomiseArray(indices);    // randomise update order
@@ -85,7 +85,7 @@ class NeuralNetwork {
     // Does the randomiseArray make a difference in this case?
   }
 
-  void randomiseArray(int[] ar) {
+  private void randomiseArray(int[] ar) {
     // Fisher-Yates shuffle
     
     int l = ar.length;      // store length of input array
@@ -104,7 +104,5 @@ class NeuralNetwork {
       neuron.removeConnections();
     }
   }
-
-
 
 }

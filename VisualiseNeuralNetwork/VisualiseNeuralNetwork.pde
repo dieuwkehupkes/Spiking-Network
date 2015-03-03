@@ -1,17 +1,22 @@
 // Create and visualise a neural network
-int Nn=6000;
-int Ncol=120;
+int Nn=600;
+int Ncol=20;
 int Nw=20;
 boolean mouseP =false;  // indicates whether mouse is pressed
 
 NeuralNetwork network;
 
 void setup() {
-  size(1300, 900);
+  // determine size based on Nn, Ncol and Nw
+  int width = Nw*Ncol + 10;
+  int height = int(Nw*Nn/Ncol) + 10;
+  System.out.println(width);
+  System.out.println(height);
+  size(width, height);
   frameRate(200);    // Nb: frame rate only corresponds with real time
                      // when enough processing power is available
 
-  ExcitatoryNeuron[] n = new ExcitatoryNeuron[Nn];
+  Neuron[] n = new Neuron[Nn];
 
   for (int i=0; i<Nn; i++) {
     n[i] = new ExcitatoryNeuron();
