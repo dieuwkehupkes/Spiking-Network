@@ -10,8 +10,8 @@ void setup() {
 
   // create neurons
   RegularSpikingNeuron n1 = new RegularSpikingNeuron();    // regular spiking
-  ExcitatoryNeuron n2 = new ExcitatoryNeuron(0.02, 0.2, -55, 4);    // intrinsically bursting
-  ExcitatoryNeuron n3 = new ExcitatoryNeuron(0.02, 0.2, -50, 2);    // chattering
+  IntrinsicallyBurstingNeuron n2 = new IntrinsicallyBurstingNeuron();    // intrinsically bursting
+  ChatteringNeuron n3 = new ChatteringNeuron();    // chattering
   FastSpikingNeuron n4 = new FastSpikingNeuron();     // fast-spiking
   Neuron n5 = new Neuron(0.02, 0.25, -65, 0.05);     // thalamo-cortical
   Neuron n6 = new Neuron(0.1, 0.23, -65, -1);     // resonator
