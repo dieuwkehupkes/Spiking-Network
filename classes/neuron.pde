@@ -22,10 +22,7 @@ class Neuron {
   // Constructor1 generate neuron with specifief values
   Neuron(float a, float b, float c, float d) {
     // Initialise neuron parameters
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
+    setParams(a, b, c, d);
 
     // Set inital values of neuron
     reset();
@@ -33,6 +30,7 @@ class Neuron {
 
   // Constructor2 generate random excitatory neuron
   Neuron() {
+    /*
     float re=random(0.1,1.0);
     a=0.02;
     b=0.2;
@@ -40,11 +38,19 @@ class Neuron {
     d=8-6*pow(re,2);
 
     reset();
+    */
   }
 
+  public void setParams(float a, float b, float c, float d) {
+    // set parameters of the neuron
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+  }
 
   float[][] show_spike_behaviour(float I, int nr_of_steps) {
-    // Show behaviour of neuron as a result of a constant input current
+    // Show behaviour of neujon as a result of a constant input current
     
     float[][] time_potential = new float[nr_of_steps][2];     // declare array to store output
     int nr_of_spikes = 0;
