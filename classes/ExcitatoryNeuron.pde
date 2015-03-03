@@ -18,17 +18,13 @@ public class ExcitatoryNeuron extends Neuron {
     
     // call constructor super
     super(a, b, c, d);
+    validateParameters(0.02, 0.02, 0.2, 0.2, -65, -50, 2, 8);
+  }
 
-    // check if parameters are within the range of inhibitory neurons
-    IllegalArgumentException wrongRangeExceptionA = new IllegalArgumentException("Parameter a outside range of inhibitory neuron.");
-    IllegalArgumentException wrongRangeExceptionB = new IllegalArgumentException("Parameter b outside range of inhibitory neuron.");
-    IllegalArgumentException wrongRangeExceptionC = new IllegalArgumentException("Parameter c outside range of inhibitory neuron.");
-    IllegalArgumentException wrongRangeExceptionD = new IllegalArgumentException("Parameter d outside range of inhibitory neuron.");
-    if (a != 0.02) throw wrongRangeExceptionA;
-    if (b != 0.2) throw wrongRangeExceptionB;
-    if (c < -65 || c > -50) throw wrongRangeExceptionC;
-    if (d < 2 || d > 8) throw wrongRangeExceptionD;
-
+  public void display() {
+    // give extra border to excitatory neurons
+    super.display();
+    rect(x+1, y, Nw-4, Nw-4);
   }
 
 }

@@ -126,6 +126,22 @@ class Neuron {
     else return false;
   }
 
+  public void validateParameters(float aMin, float aMax, float bMin, float bMax, float cMin, float cMax, float dMin, float dMax) {
+
+    // create exceptions
+    IllegalArgumentException invalidA = new IllegalArgumentException("Parameter a invalid for this type of neuron");
+    IllegalArgumentException invalidB = new IllegalArgumentException("Parameter b invalid for this type of neuron");
+    IllegalArgumentException invalidC = new IllegalArgumentException("Parameter c invalid for this type of neuron");
+    IllegalArgumentException invalidD = new IllegalArgumentException("Parameter d invalid for this type of neuron");
+
+    // validate parameters
+    if (a < aMin || a > aMax) throw invalidA;
+    if (b < bMin || b > bMax) throw invalidB;
+    if (c < cMin || c > cMax) throw invalidC;
+    if (d < dMin || d > dMax) throw invalidD;
+
+  }
+
   private void reset() {
     // reset neuron and time
     v = c;
@@ -150,6 +166,22 @@ class Neuron {
     // neuron to other neurons
     this.weights = new float[0];
     this.neighbours = new int[0];
+  }
+
+  public float a() {
+    return this.a;
+  }
+
+  public float b() {
+    return this.b;
+  }
+
+  public float c() {
+    return this.c;
+  }
+
+  public float d() {
+    return this.d;
   }
 
   public void setConnections(int[] connectTo, float[] weights) throws IllegalArgumentException {
