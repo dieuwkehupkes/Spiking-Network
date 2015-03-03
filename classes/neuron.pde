@@ -115,7 +115,7 @@ class Neuron {
   public void display() {
     // I should probably make this a little more elaborate later on
     
-    fill((int)(256*((v-40)/-120.0)),(int)(256*(1.0-((v-40)/-120.0))),0); // set colour
+    fill((int)(256*((v-40)/-120.0)),0, (int)(256*(1.0-((v-40)/-120.0)))); // set colour
     rect(x, y, Nw-2, Nw-2);       // create rectangle
   }
 
