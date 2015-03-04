@@ -14,11 +14,14 @@ class Generator {
   }
 
   public Neuron[] createNeurons(HashMap<String, Integer> neuronNumber) {
-    // create a list with neurons with types as specifed in
-    // neuronNumber
-    // i.e. if neuronNumber says "Inhibitory: 5, Exhibitory: 1000"
-    // generate a list with 1000 exhibitory neurons and 5 inhibitory
-    // neurons
+    /**
+     * create a list with neurons with types as specifed in neuronNumber
+     * 
+     * @param neuronNumber  a hashmap from strings giving the name of the neuron
+     *                      type to the number of neurons of this type that needs
+     *                      to be created
+     * @return              a list with neurons
+     */
     
     // find max nr of neurons
     int total = 0;
@@ -46,6 +49,14 @@ class Generator {
   }
 
   private void addNeurons(String neuronType, Neuron[] neurons, int n, int curIndex) {
+    /**
+     * Add neurons of specified type to the list
+     * 
+     * @param neuronType    string with the type of the neuron
+     * @param neurons       array to add neurons to
+     * @param n             number of neurons to be added
+     * @param curIndex      position in array to start appending
+     */
 
     // create exception for invalid types
     NullPointerException nonExistingType = new NullPointerException("Non existing neuron type");
@@ -76,7 +87,9 @@ class Generator {
   }
 
   private void randomiseArray(Neuron[] ar) {
-    // Fisher-Yates shuffle
+    /**
+     * Shuffle input array using Fisher-Yates shuffling
+     */
     
     int l = ar.length;      // store length of input array
     for (int i=l-1; i>0; i--) {
