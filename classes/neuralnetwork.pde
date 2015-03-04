@@ -13,7 +13,13 @@ class NeuralNetwork {
   int[] indices;
 
   NeuralNetwork(Neuron[] neurons, int Ncol, int Nw) {
-    // construct network from an array of neurons
+    /**
+     * Construct a neural network from an array of neurons
+     *
+     * @param neurons   an array with objects of type Neuron
+     * @param Ncol      the number of columns of the network
+     * @param Nw        neuron width for visualisation
+     */
 
     this.Nn = neurons.length;
     this.Ncol = Ncol;
@@ -23,20 +29,24 @@ class NeuralNetwork {
     for (int i=0; i<Nn; i++) indices[i] = i;
     for (Neuron neuron: neurons) neuron.network = this;
 
-    setNeuronCoordinates(Ncol, Nw); // compute the coordinates for the neurons
+    setNeuronCoordinates(); // compute the coordinates for the neurons
 
   }
 
   void display() {
-    // Visualise the network on a grid 
+    /**
+     * Visualise the network on a grid 
+     */
     
     displayNeurons();           // display neurons
   }
 
-  void setNeuronCoordinates(int Ncol, int Nw) {
-    // Compute the locations the neurons should have
-    // on the grid, based on the total number of neurons,
-    // columns and the neuron width
+  private void setNeuronCoordinates() {
+    /**
+     * Compute the locations the neurons should have
+     * on the grid, based on the total number of neurons,
+     * columns and the neuron width
+     */
     
     for (int i=0; i<Nn; i++) {
       neurons[i].x = (i%Ncol)*Nw + 5;
@@ -46,22 +56,31 @@ class NeuralNetwork {
   }
 
   public void mousePressed(int x, int y) {
-    // when the mouse is pressed, give the neuron
-    // it is pointing at extra activation
-    int neuronIndex = findNeuron(x, y);
+    /**
+     * When the mouse is pressed, give the neuron
+     * it is pointing at extra activation
+     */
+
+    int neuronIndex = findNeuron(x, y);     // find index neuron mouse points at
     Neuron neuron = neurons[neuronIndex];
     neuron.setI(40);   // give activation to the neuron
   }
 
   private int findNeuron(float x, float y) {
-    // find the neuron corresponding with input coordinates
-    int column = int(x/Nw);
-    int row = int(y/Nw);
-    int neuronIndex = row*Ncol + column;
+    /** 
+     * Find the neuron corresponding with the coordinates
+     * on the grid.
+     */
+    int column = int(x/Nw);     // compute column of coordinates
+    int row = int(y/Nw);        // compute row of coordinates
+    int neuronIndex = row*Ncol + column;    // compute index from row and column
     return neuronIndex;
   }
 
   public void displayNeurons() {
+    /**
+     * Display all neurons
+     */
     for (int i=0; i<Nn; i++) {
       neurons[i].display();
     }
@@ -72,8 +91,12 @@ class NeuralNetwork {
   }
 
   public void update(float I) {
-    // update the network
-
+    /**
+     * Update the values of the neurons of the
+     * network given an input given to all neurons.
+     *
+     * @param I fixed input given to all neurons
+     */
     randomiseArray(indices);    // randomise update order
     for (int i=0; i<Nn; i++) {
       int j = indices[i];
@@ -86,8 +109,9 @@ class NeuralNetwork {
   }
 
   private void randomiseArray(int[] ar) {
-    // Fisher-Yates shuffle
-    
+    /**
+     * Shuffle input array using Fisher-Yates algorithm
+     */
     int l = ar.length;      // store length of input array
     for (int i=l-1; i>0; i--) {
       int index=int(random(i+1));
@@ -98,8 +122,9 @@ class NeuralNetwork {
   }
 
   void removeWeights() {
-    // Reset the weights between the neurons
-    // in the network to 0.
+    /** 
+     * Remove any connection between neurons
+     */
     for (Neuron neuron : this.neurons) {
       neuron.removeConnections();
     }
