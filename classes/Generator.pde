@@ -8,11 +8,6 @@ class Generator {
   Generator() {
   }
 
-  public void setRandomSeed(int n) {
-    // set random seed to n
-    randomSeed(n);
-  }
-
   public Neuron[] createNeurons(HashMap<String, Integer> neuronNumber) {
     /**
      * create a list with neurons with types as specifed in neuronNumber
@@ -29,24 +24,38 @@ class Generator {
       total += nr;
     }
 
-    // create neuron Array
-    Neuron[] neurons = new Neuron[total];
+    Neuron[] neurons = new Neuron[total];       // create array to store neurons
 
-    // loop over pairs
-    int curIndex = 0;
+    int curIndex = 0;       // loop over pairs
 
     for (String neuronType : neuronNumber.keySet()) {
-      // get number of neurons
-      int n = neuronNumber.get(neuronType);
-      addNeurons(neuronType, neurons, n, curIndex);
-      curIndex += n;
+      int n = neuronNumber.get(neuronType);             // get number of neurons
+      addNeurons(neuronType, neurons, n, curIndex);     // add neurons to list
+      curIndex += n;                                    // increase index
     }
 
-    // randomise neurons
-    randomiseArray(neurons);
+    randomiseArray(neurons);     // randomise order of neurons
 
     return neurons;
   }
+
+  public NeuralNetwork connectToNeigbours(NeuralNetwork network, int maxNumNeighbours, float minWeight, float maxWeight, Architecture architecture) {
+    /**
+     * Generate connections between neurons in the network
+     * which connections are generated and what their weights
+     * are is random, but can be steered towards a certain
+     * architecture setting different parameters
+     *
+     * @param NeuralNetwork              The network to create connections for
+     * @param maxNumNeigbours            The maximum number of neigbours for every neuron
+     * @param minWeight                  The minimum weight for a connection
+     * @param maxWeight                  The maximum weight for a connection
+     */ 
+    
+    System.out.println("Not implemented yet");
+    return network;
+  }
+    
 
   private void addNeurons(String neuronType, Neuron[] neurons, int n, int curIndex) {
     /**
@@ -56,6 +65,8 @@ class Generator {
      * @param neurons       array to add neurons to
      * @param n             number of neurons to be added
      * @param curIndex      position in array to start appending
+     *
+     * @throws NullPointerException
      */
 
     // create exception for invalid types
@@ -98,6 +109,13 @@ class Generator {
       ar[index] = ar[i];
       ar[i] = next;
     }
+  }
+
+  public void setRandomSeed(int n) {
+    /**
+     * Set the random seed of the generator
+     */
+    randomSeed(n);      // set random seed to n
   }
 
 }
