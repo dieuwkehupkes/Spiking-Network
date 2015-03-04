@@ -6,15 +6,12 @@ class Generator {
   private float maxWeight, minWeight;   // the minimum and maximum connection weights
 
   Generator() {
-    System.out.println("Create generator");
   }
 
   public void setRandomSeed(int n) {
     // set random seed to n
     randomSeed(n);
   }
-
-  
 
   public Neuron[] createNeurons(HashMap<String, Integer> neuronNumber) {
     // create a list with neurons with types as specifed in
@@ -32,16 +29,28 @@ class Generator {
     // create neuron Array
     Neuron[] neurons = new Neuron[total];
 
-    // create exception for invalid types
-    NullPointerException nonExistingType = new NullPointerException("Non existing neuron type");
-
     // loop over pairs
     int curIndex = 0;
 
     for (String neuronType : neuronNumber.keySet()) {
       // get number of neurons
       int n = neuronNumber.get(neuronType);
-      // go over all possible types
+      addNeurons(neuronType, neurons, n, curIndex);
+      curIndex += n;
+    }
+
+    // randomise neurons
+    randomiseArray(neurons);
+
+    return neurons;
+  }
+
+  private void addNeurons(String neuronType, Neuron[] neurons, int n, int curIndex) {
+
+    // create exception for invalid types
+    NullPointerException nonExistingType = new NullPointerException("Non existing neuron type");
+
+    // add neurons of neuronType to array neurons
       if (neuronType.equals("ChatteringNeuron")) {
         for (int i=0; i<n; i++) neurons[i+curIndex] = new ChatteringNeuron();
       }
@@ -64,16 +73,6 @@ class Generator {
         System.out.println(neuronType);
         throw nonExistingType;
       }
-
-      curIndex += n;
-      System.out.println(curIndex);
-      
-    }
-
-    // randomise neurons
-    randomiseArray(neurons);
-
-    return neurons;
   }
 
   private void randomiseArray(Neuron[] ar) {
