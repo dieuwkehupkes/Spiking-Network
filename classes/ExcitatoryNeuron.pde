@@ -24,7 +24,8 @@ public class ExcitatoryNeuron extends Neuron {
   public void display() {
     // give extra border to excitatory neurons
     super.display();
-    rect(x+1, y, Nw-4, Nw-4);
+    rect(x+1, y+1, Nw-4, Nw-4);
+    rect(x+2, y+2, Nw-6, Nw-6);
   }
 
 }

@@ -87,7 +87,7 @@ class Neuron {
   void update() {
     // update the neuron from the weights
     float inputActivation = this.I + computeNeighbourActivation();
-    if (this.I > 0.0) System.out.println(this.I+" "+inputActivation);
+    // if (this.I > 0.0) System.out.println(this.I+" "+inputActivation);
     computeNext(inputActivation);
   }
 
@@ -129,10 +129,10 @@ class Neuron {
   public void validateParameters(float aMin, float aMax, float bMin, float bMax, float cMin, float cMax, float dMin, float dMax) {
 
     // create exceptions
-    IllegalArgumentException invalidA = new IllegalArgumentException("Parameter a invalid for this type of neuron");
-    IllegalArgumentException invalidB = new IllegalArgumentException("Parameter b invalid for this type of neuron");
-    IllegalArgumentException invalidC = new IllegalArgumentException("Parameter c invalid for this type of neuron");
-    IllegalArgumentException invalidD = new IllegalArgumentException("Parameter d invalid for this type of neuron");
+    IllegalArgumentException invalidA = new IllegalArgumentException("Parameter a invalid for type of neuron "+this.getClass());
+    IllegalArgumentException invalidB = new IllegalArgumentException("Parameter b invalid for type of neuron "+this.getClass());
+    IllegalArgumentException invalidC = new IllegalArgumentException("Parameter c invalid for type of neuron "+this.getClass());
+    IllegalArgumentException invalidD = new IllegalArgumentException("Parameter d invalid for type of neuron "+this.getClass());
 
     // validate parameters
     if (a < aMin || a > aMax) throw invalidA;
