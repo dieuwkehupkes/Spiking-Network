@@ -52,7 +52,9 @@ class Generator {
      * @param maxWeight                  The maximum weight for a connection
      */ 
     
-    System.out.println("Not implemented yet");
+    for (Neuron neuron: network.neurons) {
+      // heck for syntactic correctness
+    }
     return network;
   }
     
@@ -68,6 +70,8 @@ class Generator {
      *
      * @throws NullPointerException
      */
+
+    /* Maybe I could do something here as well with an interface to make this better */
 
     // create exception for invalid types
     NullPointerException nonExistingType = new NullPointerException("Non existing neuron type");

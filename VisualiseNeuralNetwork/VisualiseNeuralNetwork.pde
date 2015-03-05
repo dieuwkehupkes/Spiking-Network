@@ -24,11 +24,10 @@ void setup() {
   n = G.createNeurons(neuronDistr);
 
   network = new NeuralNetwork(n, Ncol, Nw);
+
+  // Architecture a = Architecture(5, 5, -5);
+  // network = G.connectToNeighbours(network, 5, -5.0, 5.0, a); 
   
-  int[] connectedTo = {1, 2, 3, 4, 5, 6};
-  float[] w = {100, 400, 5, 9, 8, 10};
-  
-  network.neurons[0].setConnections(connectedTo, w);
   network.display();
   
 }
