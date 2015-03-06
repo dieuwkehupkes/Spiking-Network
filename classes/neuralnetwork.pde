@@ -118,6 +118,21 @@ class NeuralNetwork {
     // Does the randomiseArray make a difference in this case?
   }
 
+  public void printConnections() {
+    /**
+     * Print the connections between the
+     * neurons in the network
+     */
+    int counter = 1;
+    for (Neuron neuron : neurons) {
+      System.out.println("Neuron "+counter+ " receives input from:");
+      for (int i=0; i<neuron.numNeighbours; i++) {
+        System.out.println("Neuron "+neuron.neighbours[i]+"\t weight: "+neuron.weights[i]);
+      }
+      counter++;
+    }
+  }
+
   private void randomiseArray(int[] ar) {
     /**
      * Shuffle input array using Fisher-Yates algorithm
