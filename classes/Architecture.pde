@@ -6,7 +6,7 @@ abstract class Architecture {
    */
 
   // Constructor
-  public Architecture(int maxNumNeighbours, float maxWeight, float minWeight) {
+  public Architecture(int maxNumNeighbours, float minWeight, float maxWeight) {
     setMaxNumNeighbours(maxNumNeighbours);
     setMaxWeight(maxWeight);
     setMinWeight(minWeight);
@@ -18,13 +18,14 @@ abstract class Architecture {
   private DistanceMetric distanceMetric;         // The distance metric used in tha architecture
 
   public void generateConnections(NeuralNetwork network) {
+    network.initNeighbours(maxNumNeighbours());     // create arrays for weights and neighbours
     for (Neuron neuron : network.neurons) {     // add connections for all neurons
       addConnections(network, neuron);
     }
   }
 
   // methods
-  abstract public void addConnections(NeuralNetwork network, Neuron neuron);     // add connections for a neuron
+  abstract protected void addConnections(NeuralNetwork network, Neuron neuron);     // add connections for a neuron
 
  // Setters
 

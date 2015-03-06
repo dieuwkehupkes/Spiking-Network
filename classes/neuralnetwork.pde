@@ -62,6 +62,19 @@ class NeuralNetwork {
     addNeurons(neurons, Ncol, Nw);      // add to network
   }
 
+  public void addConnections() {
+    /**
+     * Add connections to the network, using the architecture of
+     * the network
+     */
+    if ( hasArchitecture()) {
+      architecture.generateConnections(this);
+    }
+    else {
+      throw new NullPointerException("No architecture set for the network");
+    }
+  }
+
   private Neuron[] generateNeurons(HashMap<String, Integer> generateNeurons) {
     /**
      * Generate a list with neurons as specified in generateNeurons
@@ -285,6 +298,17 @@ class NeuralNetwork {
     }
   }
 
+  private boolean hasArchitecture() {
+    /**
+     * Return if architecture is set
+     */
+    if (this.architecture == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   // Setters
 
   // Getters
@@ -294,7 +318,7 @@ class NeuralNetwork {
      * Return maximum number of neighbours
      * of the neurons
      */
-    int maxNumNeighbours = 0;
+    int maxNumNeighbours;
     try {
         maxNumNeighbours = this.architecture.maxNumNeighbours();
     } catch (NullPointerException e) {
@@ -302,5 +326,34 @@ class NeuralNetwork {
     }
     return maxNumNeighbours;
   }
+
+  public float getMinWeight() {
+    /**
+     * Return maximum number of neighbours
+     * of the neurons
+     */
+    float minWeight;
+    try {
+        minWeight = this.architecture.minWeight();
+    } catch (NullPointerException e) {
+      throw new NullPointerException("Architecture of Network is not set, maximum number of neighbours unknown");
+    }
+    return minWeight;
+  }
+
+  public float getMaxWeight() {
+    /**
+     * Return maximum number of neighbours
+     * of the neurons
+     */
+    float maxWeight;
+    try {
+        maxWeight = this.architecture.maxWeight();
+    } catch (NullPointerException e) {
+      throw new NullPointerException("Architecture of Network is not set, maximum number of neighbours unknown");
+    }
+    return maxWeight;
+  }
+
 
 }

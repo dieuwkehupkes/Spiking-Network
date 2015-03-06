@@ -23,13 +23,11 @@ public class Neighbour extends Architecture {
       int neuronIndex = network.indices[i];
       float distance = distanceMetric().distance(neuron, network.neurons[neuronIndex]);     // compute distance
       if (distance != 0 && random(1.0)<pow(0.95, distance)) {   // there is some variation possible here
-        System.out.println("connection made");
         neuron.neighbours[neuron.numNeighbours] = neuronIndex;  // set nth neighbour
         neuron.weights[neuron.numNeighbours] = random(minWeight(), maxWeight());
         neuron.numNeighbours++;     // increment neighbour counter
       }
     }
-    
   }
 
 }

@@ -1,6 +1,6 @@
 // Create and visualise a neural network
-int Nn=1500;
-int Ncol=50;
+int Nn=10;
+int Ncol=5;
 int Nw=20;
 boolean mouseP =false;  // indicates whether mouse is pressed
 
@@ -16,18 +16,19 @@ void setup() {
 
   Neuron[] n = new Neuron[Nn];
   HashMap<String, Integer> neuronDistr = new HashMap<String, Integer>();   // nrs of diff neuron types
-  Generator G = new Generator();    // generator to generate neural network
 
-  neuronDistr.put("ExcitatoryNeuron", 1500);
+  neuronDistr.put("ExcitatoryNeuron", 10);
   // neuronDistr.put("InhibitoryNeuron", 500);
 
-  n = G.createNeurons(neuronDistr);
+  network = new NeuralNetwork();
+  network.addNeurons(neuronDistr, Ncol, Nw);
 
-  network = new NeuralNetwork(n, Ncol, Nw);
-
-  Architecture a = new Neighbour(50, 0.0, 10.0);
+  Architecture a = new Neighbour(5, -5.0, 5.0);
   a.setDistanceMetric(new ManhattanDistance());
-  G.connectToNeighbours(network, 50, 0.0, 10.0, a); 
+  network.setArchitecture(a);
+  network.addConnections();
+
+  network.printConnections();
   
   network.display();
   
