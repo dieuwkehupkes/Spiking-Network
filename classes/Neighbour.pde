@@ -9,28 +9,27 @@ public class Neighbour extends Architecture {
 
   // Constructor
   public Neighbour(int maxNumNeighbours, float maxWeight, float minWeight) {
-    super();
-    setMaxNumNeighbours(maxNumNeighbours);
-    setMaxWeight(maxWeight);
-    setMinWeight(minWeight);
+    super(maxNumNeighbours, maxWeight, minWeight);
   }
 
-  public NeuralNetwork generateConnections(NeuralNetwork network, Neuron neuron, DistanceMetric distanceMetric) {
+  public void addConnections(NeuralNetwork network, Neuron neuron) {
     /**
      * Explain what happens
      */
 
-    network.randomiseArray(network.indices);
+    network.randomiseArray(network.indices);    // randomise order of neighbours
 
-    for (int i=0; i<Nn && neuron.numNeighbours<maxNumNeighbours(); i++) { // loop over possible neigbours
-      float distance = distanceMetric.distance(neuron, network.neurons[i]);     // compute distance
-      if (distance != 0 && random(1.0)<pow(0.95, distance)) {
-        // compute if current neuron should be a neighbour of neuron in loop
-        // connect them
+    for (int i=0; i<network.Nn && neuron.numNeighbours<maxNumNeighbours(); i++) { // loop over possible neigbours
+      int neuronIndex = network.indices[i];
+      float distance = distanceMetric().distance(neuron, network.neurons[neuronIndex]);     // compute distance
+      if (distance != 0 && random(1.0)<pow(0.95, distance)) {   // there is some variation possible here
+        System.out.println("connection made");
+        neuron.neighbours[neuron.numNeighbours] = neuronIndex;  // set nth neighbour
+        neuron.weights[neuron.numNeighbours] = random(minWeight(), maxWeight());
+        neuron.numNeighbours++;     // increment neighbour counter
       }
     }
-    return network;
-
+    
   }
 
 }

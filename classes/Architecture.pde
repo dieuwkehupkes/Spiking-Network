@@ -5,17 +5,30 @@ abstract class Architecture {
    * describe class
    */
 
+  // Constructor
+  public Architecture(int maxNumNeighbours, float maxWeight, float minWeight) {
+    setMaxNumNeighbours(maxNumNeighbours);
+    setMaxWeight(maxWeight);
+    setMinWeight(minWeight);
+  }
+
   // fields
   private int maxNumNeighbours;          // The maximum number of neighbours for a neuron
   private float maxWeight, minWeight;    // The maximum and minimum weights of the connections
-  private String distanceMetric;         // The distance metric used in tha architecture
+  private DistanceMetric distanceMetric;         // The distance metric used in tha architecture
+
+  public void generateConnections(NeuralNetwork network) {
+    for (Neuron neuron : network.neurons) {     // add connections for all neurons
+      addConnections(network, neuron);
+    }
+  }
 
   // methods
-  abstract public NeuralNetwork generateConnections(NeuralNetwork network, Neuron neuron, DistanceMetric distanceMetric);
+  abstract public void addConnections(NeuralNetwork network, Neuron neuron);     // add connections for a neuron
 
  // Setters
 
-  public void setDistanceMetric(String distanceMetric) {
+  public void setDistanceMetric(DistanceMetric distanceMetric) {
     this.distanceMetric = distanceMetric;
   }
 
@@ -33,7 +46,7 @@ abstract class Architecture {
 
   // Getters
   
-  public String distanceMetric() {
+  public DistanceMetric distanceMetric() {
     return distanceMetric;
   }
 

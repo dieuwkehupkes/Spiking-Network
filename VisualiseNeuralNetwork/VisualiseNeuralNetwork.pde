@@ -18,15 +18,16 @@ void setup() {
   HashMap<String, Integer> neuronDistr = new HashMap<String, Integer>();   // nrs of diff neuron types
   Generator G = new Generator();    // generator to generate neural network
 
-  neuronDistr.put("ExcitatoryNeuron", 1000);
-  neuronDistr.put("InhibitoryNeuron", 500);
+  neuronDistr.put("ExcitatoryNeuron", 1500);
+  // neuronDistr.put("InhibitoryNeuron", 500);
 
   n = G.createNeurons(neuronDistr);
 
   network = new NeuralNetwork(n, Ncol, Nw);
 
-  // Architecture a = Architecture(5, 5, -5);
-  // network = G.connectToNeighbours(network, 5, -5.0, 5.0, a); 
+  Architecture a = new Neighbour(50, 0.0, 10.0);
+  a.setDistanceMetric(new ManhattanDistance());
+  G.connectToNeighbours(network, 50, 0.0, 10.0, a); 
   
   network.display();
   

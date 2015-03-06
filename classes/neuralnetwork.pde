@@ -55,6 +55,16 @@ class NeuralNetwork {
     }
   }
 
+  public void initNeighbours(int maxNumNeighbours) {
+    /**
+     * create arrays for neighbours for each neuron
+     */
+    for (Neuron neuron : neurons) {
+      neuron.neighbours = new int[maxNumNeighbours];
+      neuron.weights = new float[maxNumNeighbours];
+    }
+  }
+
   public void mousePressed(int x, int y) {
     /**
      * When the mouse is pressed, give the neuron

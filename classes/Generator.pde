@@ -39,7 +39,7 @@ class Generator {
     return neurons;
   }
 
-  public NeuralNetwork connectToNeigbours(NeuralNetwork network, int maxNumNeighbours, float minWeight, float maxWeight, Architecture architecture) {
+  public void connectToNeighbours(NeuralNetwork network, int maxNumNeighbours, float minWeight, float maxWeight, Architecture architecture) {
     /**
      * Generate connections between neurons in the network
      * which connections are generated and what their weights
@@ -51,11 +51,14 @@ class Generator {
      * @param minWeight                  The minimum weight for a connection
      * @param maxWeight                  The maximum weight for a connection
      */ 
+
+    architecture.setMaxNumNeighbours(maxNumNeighbours);
+    architecture.setMinWeight(minWeight);
+    architecture.setMaxWeight(maxWeight);
+
     
-    for (Neuron neuron: network.neurons) {
-      // heck for syntactic correctness
-    }
-    return network;
+    network.initNeighbours(maxNumNeighbours);     // assign neighbour arrays to the neurons in the network
+    architecture.generateConnections(network);
   }
     
 
