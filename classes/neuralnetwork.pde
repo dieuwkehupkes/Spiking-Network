@@ -12,10 +12,24 @@ class NeuralNetwork {
 
   private int[] indices;        // indices to loop over the neurons of the network
 
-  // Default empty constructor
+  // Constructors
+
+  // Empty constructor
   NeuralNetwork() {
-    // Do nothing, add neurons and architecture later
+    /** 
+     * Construct empty neural network
+     */
   }
+
+  NeuralNetwork(Neuron[] neurons, int Ncol, int Nw) {
+    /**
+     * Construct network with neurons
+     */
+    addNeurons(neurons, Ncol, Nw);
+  }
+
+  // Make two more constructors: one in which also architecture is
+  // inputted and one in which only architecture is inputted
 
   public void addNeurons(Neuron[] neurons, int Ncol, int Nw) {
     /**
@@ -121,6 +135,13 @@ class NeuralNetwork {
       }
   }
 
+  public void addArchitecture(Architecture architecture) {
+    /**
+     * Add an architecture to the network
+     */
+    this.architecture = architecture;
+  }
+
   void display() {
     /**
      * Visualise the network on a grid 
@@ -201,7 +222,7 @@ class NeuralNetwork {
      */
     randomiseArray(indices);    // randomise update order
     for (int i=0; i<Nn; i++) {
-      int j = indices[i];
+      Integer j = indices[i];
       neurons[j].update(I);
     }
 
@@ -238,15 +259,14 @@ class NeuralNetwork {
     }
   }
 
-   private void randomiseArray(Neuron[] ar) {
+  private void randomiseArray(Object[] ar) {
     /**
-     * Shuffle input array using Fisher-Yates shuffling
+     * Shuffle input array using Fisher-Yates algorithm
      */
-    
     int l = ar.length;      // store length of input array
     for (int i=l-1; i>0; i--) {
       int index=int(random(i+1));
-      Neuron next = ar[index];
+      Object next = ar[index];
       ar[index] = ar[i];
       ar[i] = next;
     }
