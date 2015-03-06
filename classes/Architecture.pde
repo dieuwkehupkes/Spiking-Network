@@ -2,8 +2,20 @@
 
 abstract class Architecture {
   /**
-   * describe class
+   * Abstract class describing the architecture of a neural network;
+   * an architecture object describes how likeli different neurons in
+   * a network are to be connected, what the minimum and maximum weights
+   * between the neurons are and how many neighbours every neuron
+   * maximally has
    */
+
+
+  // fields
+  private int maxNumNeighbours;                     // Maximum number of neighbours for a neuron
+  private float maxWeight, minWeight;               // Maximum and minimum weights of the connections
+  private DistanceMetric distanceMetric;            // Distance metric used in tha architecture
+  private ProbabilityFunction probabilityFunction;  // Function used to compute how likely a
+                                                    // neuron is to connect with another neuron
 
   // Constructor
   public Architecture(int maxNumNeighbours, float minWeight, float maxWeight) {
@@ -12,11 +24,7 @@ abstract class Architecture {
     setMinWeight(minWeight);
   }
 
-  // fields
-  private int maxNumNeighbours;          // The maximum number of neighbours for a neuron
-  private float maxWeight, minWeight;    // The maximum and minimum weights of the connections
-  private DistanceMetric distanceMetric;         // The distance metric used in tha architecture
-
+  // Methods
   public void generateConnections(NeuralNetwork network) {
     network.initNeighbours(maxNumNeighbours());     // create arrays for weights and neighbours
     for (Neuron neuron : network.neurons) {     // add connections for all neurons
@@ -24,8 +32,7 @@ abstract class Architecture {
     }
   }
 
-  // methods
-  abstract protected void addConnections(NeuralNetwork network, Neuron neuron);     // add connections for a neuron
+  abstract protected void addConnections(NeuralNetwork network, Neuron n);  // add connections for 1 neuron
 
  // Setters
 
@@ -45,10 +52,18 @@ abstract class Architecture {
     this.maxWeight = maxWeight;
   }
 
+  public void setProbabilityFunction(ProbabilityFunction probabilityFunction) {
+    this.probabilityFunction = probabilityFunction;
+  }
+
   // Getters
   
   public DistanceMetric distanceMetric() {
     return distanceMetric;
+  }
+
+  public ProbabilityFunction probabilityFunction() {
+    return probabilityFunction;
   }
 
   public int maxNumNeighbours() {
@@ -62,5 +77,6 @@ abstract class Architecture {
   public float maxWeight() {
     return maxWeight;
   }
+
 
 }
