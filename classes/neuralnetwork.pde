@@ -72,8 +72,12 @@ class NeuralNetwork {
      */
 
     int neuronIndex = findNeuron(x, y);     // find index neuron mouse points at
-    Neuron neuron = neurons[neuronIndex];
-    neuron.setI(40);   // give activation to the neuron
+    try {
+      Neuron neuron = neurons[neuronIndex];
+      neuron.setI(40);   // give activation to the neuron
+     } catch (ArrayIndexOutOfBoundsException e) {
+       // do nothing if mouse points outside of network
+    }
   }
 
   private int findNeuron(float x, float y) {
