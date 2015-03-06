@@ -1,36 +1,124 @@
 // Class representing a neural network
 
 class NeuralNetwork {
-  // class representing a neural network
-  int Nn;       // number of neurons
-  int Ncol;     // number of columns
-  int Nw;       // pixel width of the neurons (for visualisation)
 
-  float minWeight;  // minimal weight between two neurons
-  float maxWeight;  // maximal weight between two neurons
-  
+  // Fields
+  private int Nn;       // number of neurons
+  private int Ncol;     // number of columns
+  private int Nw;       // pixel width of the neurons (for visualisation)
+
   Neuron neurons[];     // the neurons forming the network
-  int[] indices;
+  Architecture architecture;     // the architecture of the network
 
-  NeuralNetwork(Neuron[] neurons, int Ncol, int Nw) {
+  private int[] indices;        // indices to loop over the neurons of the network
+
+  // Default empty constructor
+  NeuralNetwork() {
+    // Do nothing, add neurons and architecture later
+  }
+
+  public void addNeurons(Neuron[] neurons, int Ncol, int Nw) {
     /**
-     * Construct a neural network from an array of neurons
+     * Add a pre-generated list of neurons to
+     * the network
+     */
+    this.neurons = neurons;              // add neurons
+    this.Ncol = Ncol;                    // set column width network
+    this.Nw = Nw;                        // set neuron width network
+    this.Nn = neurons.length;            // set number of neurons of network
+    this.indices = new int[Nn];          // create list with indices
+    for (int i=0; i<Nn; i++) this.indices[i] = i;   // add indices
+
+    for (Neuron neuron : neurons) neuron.network = this;    // associate neurons with network
+
+    setNeuronCoordinates();             // compute coordinates for neurons
+  }
+
+  public void addNeurons(HashMap<String, Integer> generateNeurons, int Ncol, int Nw) {
+    /**
+     * Generate neurons as specified in generateNeurons and
+     * add them to the network
      *
-     * @param neurons   an array with objects of type Neuron
-     * @param Ncol      the number of columns of the network
-     * @param Nw        neuron width for visualisation
+     * @param generateNeurons   a map from neurontype to number of
+     *                          neurons for this type
      */
 
-    this.Nn = neurons.length;
-    this.Ncol = Ncol;
-    this.Nw = Nw;
-    this.neurons = neurons;
-    indices = new int[Nn];
-    for (int i=0; i<Nn; i++) indices[i] = i;
-    for (Neuron neuron: neurons) neuron.network = this;
+    // find number of neurons
+    Neuron[] neurons = generateNeurons(generateNeurons);    // generate the neurons
+    addNeurons(neurons, Ncol, Nw);      // add to network
+  }
 
-    setNeuronCoordinates(); // compute the coordinates for the neurons
+  private Neuron[] generateNeurons(HashMap<String, Integer> generateNeurons) {
+    /**
+     * Generate a list with neurons as specified in generateNeurons
+     *
+     * @param generateNeurons       A hashmap from strings giving the name of the
+     *                              neuron type to a number describing how many
+     *                              neurons of this type should be created
+     * @return                      a list with neurons, randomised order
+     */
 
+    // find max nr of neurons
+    int total = 0;
+    for (int nr : generateNeurons.values()) total+= nr;
+    System.out.println(total);
+
+    Neuron[] neurons = new Neuron[total];       // create Array to store neurons
+
+    int curIndex = 0;                           // Array index to store new neuron
+
+    for (String neuronType : generateNeurons.keySet()) {
+      int n = generateNeurons.get(neuronType);              // get number of neurons
+      appendNeurons(neuronType, neurons, n, curIndex);      // add neurons to array
+      curIndex += n;                                        // increase array index
+    }
+
+    randomiseArray(neurons);            // randomise order of neurons
+
+    return neurons;
+  }
+
+  private void appendNeurons(String neuronType, Neuron[] neurons, int n, int curIndex) {
+    /**
+     * Add neurons of specified type to the list
+     * NB: needs to be updated if new neuron types are added!!
+     * 
+     * @param neuronType    string with the type of the neuron
+     * @param neurons       array to add neurons to
+     * @param n             number of neurons to be added
+     * @param curIndex      position in array to start appending
+     *
+     * @throws NullPointerException
+     */
+
+    /* Maybe I could do something here as well with an interface to make this better */
+
+    // create exception for invalid types
+    NullPointerException nonExistingType = new NullPointerException("Non existing neuron type");
+
+    // add neurons of neuronType to array neurons
+      if (neuronType.equals("ChatteringNeuron")) {
+        for (int i=0; i<n; i++) neurons[i+curIndex] = new ChatteringNeuron();
+      }
+      else if (neuronType.equals("ExcitatoryNeuron")) {
+        for (int i=0; i<n; i++) neurons[i+curIndex] = new ExcitatoryNeuron();
+      }
+      else if (neuronType.equals("FastSpikingNeuron")) {
+        for (int i=0; i<n; i++) neurons[i+curIndex] = new FastSpikingNeuron();
+      }
+      else if (neuronType.equals("InhibitoryNeuron")) {
+        for (int i=0; i<n; i++) neurons[i+curIndex] = new InhibitoryNeuron();
+      }
+      else if (neuronType.equals("IntrinsicallyBurstingNeuron")) {
+        for (int i=0; i<n; i++) neurons[i+curIndex] = new IntrinsicallyBurstingNeuron();
+      }
+      else if (neuronType.equals("RegularSpikingNeuron")) {
+        for (int i=0; i<n; i++) neurons[i+curIndex] = new RegularSpikingNeuron();
+      }
+      else {
+        System.out.println(neuronType);
+        throw nonExistingType;
+      }
   }
 
   void display() {
@@ -145,6 +233,20 @@ class NeuralNetwork {
     for (int i=l-1; i>0; i--) {
       int index=int(random(i+1));
       int next = ar[index];
+      ar[index] = ar[i];
+      ar[i] = next;
+    }
+  }
+
+   private void randomiseArray(Neuron[] ar) {
+    /**
+     * Shuffle input array using Fisher-Yates shuffling
+     */
+    
+    int l = ar.length;      // store length of input array
+    for (int i=l-1; i>0; i--) {
+      int index=int(random(i+1));
+      Neuron next = ar[index];
       ar[index] = ar[i];
       ar[i] = next;
     }
