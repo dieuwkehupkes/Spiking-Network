@@ -75,7 +75,6 @@ class NeuralNetwork {
     // find max nr of neurons
     int total = 0;
     for (int nr : generateNeurons.values()) total+= nr;
-    System.out.println(total);
 
     Neuron[] neurons = new Neuron[total];       // create Array to store neurons
 
@@ -135,11 +134,16 @@ class NeuralNetwork {
       }
   }
 
-  public void addArchitecture(Architecture architecture) {
+  public void setArchitecture(Architecture architecture) {
     /**
-     * Add an architecture to the network
+     * Add an architecture to the network, or change the current
+     * architecture of the network;
+     * As the weight organisation is directly related to
+     * the architecture of the network, changing the architecture
+     * of the network will remove all weights.
      */
     this.architecture = architecture;
+    this.removeWeights();
   }
 
   void display() {
@@ -279,6 +283,24 @@ class NeuralNetwork {
     for (Neuron neuron : this.neurons) {
       neuron.removeConnections();
     }
+  }
+
+  // Setters
+
+  // Getters
+  
+  public int getMaxNumNeighbours() {
+    /**
+     * Return maximum number of neighbours
+     * of the neurons
+     */
+    int maxNumNeighbours = 0;
+    try {
+        maxNumNeighbours = this.architecture.maxNumNeighbours();
+    } catch (NullPointerException e) {
+      throw new NullPointerException("Architecture of Network is not set, maximum number of neighbours unknown");
+    }
+    return maxNumNeighbours;
   }
 
 }
