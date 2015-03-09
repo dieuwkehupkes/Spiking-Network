@@ -6,12 +6,16 @@ class Neuron {
   float u, v;        // u and v when they were last computed
   private float I;      // extrenal input to neuron
   boolean fired = false;
+  boolean trainingMode = false;
+  Training training = new HeuristicalHebbian();     // Change this later to be part of network
   float timeStep = 0.1;
 
   NeuralNetwork network;    // the network the neuron is part of
   int neighbours[];     // indices pointing to the neighbours of the neuron
   float weights[];        // weights to the neighbours
-  int numNeighbours=0;
+  int numNeighbours = 0;
+  int numPotential = 30;        // CHANGE THIS LATER TO BE PART OF ARCHITECTURE!
+  int potentialNeighbours[] = new int[numPotential];        // indices pointing to potential neighbours
 
   int x;        // x coordinate for displaying neuron
   int y;        // y coordinate for displaying neuron
@@ -85,19 +89,22 @@ class Neuron {
   }
 
   void update() {
-    // update the neuron from the weights
-    float inputActivation = this.I + computeNeighbourActivation();
-    // if (this.I > 0.0) System.out.println(this.I+" "+inputActivation);
-    computeNext(inputActivation);
+    // Update with 0.0 input from outside the network
+    update(0.0);
   }
 
   void update(float thalamicInput) {
-    // compute the update considering also
-    // thalamic input
+    /**
+     * Update values v and u of the network, and
+     * update the weights if network is in
+     * training mode.
+     */
     
     float neighbourActivation = computeNeighbourActivation();
     float inputActivation = this.I + thalamicInput + neighbourActivation;
     computeNext(inputActivation);
+
+    if (trainingMode) updateWeights();        // update weights
   }
 
   private float computeNeighbourActivation() {
@@ -110,6 +117,51 @@ class Neuron {
     }
 
     return neighbourActivation;
+  }
+
+  private void updateWeights() {
+    /** 
+     * Update the connections of the network
+     * to his neighbours, based on their
+     * recent firing activity and the learning
+     * function
+     */
+    // loop over neurons with which a connection is already established
+    for (int i=0; i < this.numNeighbours; i++) {
+    float update = training.updateExistingConnection(this, network.neurons[i]);
+    }
+
+    rmLowConnections();     // remove connections below minimum weight of the network
+    
+    // loop over close neurons to see if a connection should be established
+    int i = 0;
+    while (numNeighbours < maxNumNeighbours && i < potentialNeighbours.length) {
+      // training.updateNonExistingConnection(this, potentialNeighbours[i]);
+      i++;
+    }
+
+  }
+
+  private void rmLowConnections() {
+    /**
+     * Remove connections whose weight got
+     * lower than the minimum weight of the network
+     * the neuron is part of
+     * THIS IS NOT REALLY CORRECT, FIND A DIFFERENT WAY TO REMOVE
+     * CONNECTIONS
+     */
+    int i = 0;      // index of neighbour
+    while (i < numNeighbours) {
+      if (weights[i] < network.architecture.minWeight()) {      // remove weights that are too low
+        weights[i] = weights[numNeighbours-1];      // remove connection and
+        neighbours[i] = neighbours[numNeighbours-1];   // replace with last connection
+        numNeighbours--;                            // decrease nr of neighbours
+        potentialNeighbours[numPotential - numNeighbours] = i;  // add neuron to potential connections
+        numPotential++;
+      } else {
+        i++;
+      }
+    }
   }
 
   public void display() {
@@ -168,6 +220,8 @@ class Neuron {
     this.neighbours = new int[0];
   }
 
+  // getters
+
   public float a() {
     return this.a;
   }
@@ -183,6 +237,8 @@ class Neuron {
   public float d() {
     return this.d;
   }
+
+  // setters
 
   public void setConnections(int[] connectTo, float[] weights) throws IllegalArgumentException {
     // set weights to the list of neurons that is

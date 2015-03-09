@@ -9,6 +9,7 @@ float minWeight=-5.0;           // minimal weight between neurons
 float maxWeight=15.0;           // maximum weight between neurons
 DistanceMetric distMetric = new ManhattanDistance();        // distance metric used
 ProbabilityFunction probFunction = new Exponential(0.95);   // funct to determine prob of connecting
+Training trainingFunction = new HeuristicalHebbian();   // training function for learning
 
 // variables to use for visualisation
 boolean mouseP = false;         // indicates whether mouse is pressed

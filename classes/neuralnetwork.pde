@@ -244,19 +244,6 @@ class NeuralNetwork {
       Integer j = indices[i];
       neurons[j].update(I);
     }
-
-    if (this.trainingMode) {    // update weights if network is in training mode
-      updateWeights();
-    }
-  }
-
-  public void updateWeights() {
-    /**
-     * Update the weights of the network based on
-     * which neurons were recently firing
-     * Not implented yet
-     */
-    // Implement
   }
 
   public void printConnections() {
@@ -327,6 +314,9 @@ class NeuralNetwork {
      * Toggle training mode
      */
     this.trainingMode = this.trainingMode ? false :true;
+    for (Neuron neuron : this.neurons) {
+      neuron.trainingMode = this.trainingMode;  // change training mode neurons
+    }
   }
 
   // Getters
