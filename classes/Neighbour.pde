@@ -22,7 +22,7 @@ public class Neighbour extends Architecture {
     for (int i=0; i<network.Nn && neuron.numNeighbours<maxNumNeighbours(); i++) { // loop over possible neigbours
       int neuronIndex = network.indices[i];
       float distance = distanceMetric().distance(neuron, network.neurons[neuronIndex]);     // compute distance
-      if (distance != 0 && random(1.0)<pow(0.95, distance)) {   // there is some variation possible here
+      if (distance != 0 && random(1.0)<probabilityFunction().probability(distance)) {   // there is some variation possible here
         neuron.neighbours[neuron.numNeighbours] = neuronIndex;  // set nth neighbour
         neuron.weights[neuron.numNeighbours] = random(minWeight(), maxWeight());
         neuron.numNeighbours++;     // increment neighbour counter
