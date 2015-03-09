@@ -1,14 +1,18 @@
-// Create and visualise a neural network
-int Nn=120;
-int Ncol=12;
-int Nw=20;
-int maxNumNeighbours=50;
-float minWeight=-5.0;
-float maxWeight=15.0;
-DistanceMetric distMetric = new ManhattanDistance();
-ProbabilityFunction probFunction = new Exponential(0.95);
+// Parameters for visual network
+int Nexhib = 800;               // number of random exhibitory neurons
+int Ninhib = 400;               // number of random inhibitory neurons
+int Nn = Nexhib + Ninhib;       // total number of neurons
+int Ncol=40;                    // number of columns
+int Nw=20;                      // neuron width
+int maxNumNeighbours=50;        // maximum nr of neigbours for neuron
+float minWeight=-5.0;           // minimal weight between neurons
+float maxWeight=15.0;           // maximum weight between neurons
+DistanceMetric distMetric = new ManhattanDistance();        // distance metric used
+ProbabilityFunction probFunction = new Exponential(0.95);   // funct to determine prob of connecting
 
-boolean mouseP =false;  // indicates whether mouse is pressed
+// variables to use for visualisation
+boolean mouseP = false;         // indicates whether mouse is pressed
+boolean trainingMode = false;   // indicate whether network is in training mode
 
 NeuralNetwork network;
 
@@ -23,8 +27,8 @@ void setup() {
   Neuron[] n = new Neuron[Nn];
   HashMap<String, Integer> neuronDistr = new HashMap<String, Integer>();   // nrs of diff neuron types
 
-  neuronDistr.put("ExcitatoryNeuron", 100);
-  // neuronDistr.put("InhibitoryNeuron", 500);
+  neuronDistr.put("ExcitatoryNeuron", Nexhib);
+  neuronDistr.put("InhibitoryNeuron", Ninhib);
 
   network = new NeuralNetwork();
   network.addNeurons(neuronDistr, Ncol, Nw);
@@ -41,10 +45,10 @@ void setup() {
 
 void draw() {
 
-  float I = 0;
+  float I = random(4.0);
 
   if (mouseP) network.mousePressed(mouseX, mouseY);
-  network.update();
+  network.update(I);
   network.display();
 
 }
@@ -64,4 +68,9 @@ void keyPressed() {
   // specify what happens when a key is pressed
   // not implemented yet
   if (key=='q' || key=='Q') exit();
+  if (key=='t' || key=='T') {   // toggle training mode
+    trainingMode = trainingMode ? false : true;
+    String print = trainingMode ? "Training mode on" : "Training mode off";
+    System.out.println(print);
+  }
 }
