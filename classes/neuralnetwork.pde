@@ -12,6 +12,8 @@ class NeuralNetwork {
 
   private int[] indices;        // indices to loop over the neurons of the network
 
+  private boolean trainingMode = false;     // training mode of network is false
+
   // Constructors
 
   // Empty constructor
@@ -243,9 +245,18 @@ class NeuralNetwork {
       neurons[j].update(I);
     }
 
-    // I wonder whether this makes a difference, as I only set
-    // the neurons to 'fire' a round later.
-    // Does the randomiseArray make a difference in this case?
+    if (this.trainingMode) {    // update weights if network is in training mode
+      updateWeights();
+    }
+  }
+
+  public void updateWeights() {
+    /**
+     * Update the weights of the network based on
+     * which neurons were recently firing
+     * Not implented yet
+     */
+    // Implement
   }
 
   public void printConnections() {
@@ -310,6 +321,13 @@ class NeuralNetwork {
   }
 
   // Setters
+  
+  public void toggleTrainingMode() {
+    /**
+     * Toggle training mode
+     */
+    this.trainingMode = this.trainingMode ? false :true;
+  }
 
   // Getters
   
@@ -355,5 +373,12 @@ class NeuralNetwork {
     return maxWeight;
   }
 
+  public boolean getTrainingMode() {
+    /**
+     * Return true if the network is in
+     * training mode false otherwise
+     */
+    return this.trainingMode;
+  }
 
 }

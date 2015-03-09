@@ -70,6 +70,7 @@ void keyPressed() {
   if (key=='q' || key=='Q') exit();
   if (key=='t' || key=='T') {   // toggle training mode
     trainingMode = trainingMode ? false : true;
+    network.toggleTrainingMode();
     String print = trainingMode ? "Training mode on" : "Training mode off";
     System.out.println(print);
   }
