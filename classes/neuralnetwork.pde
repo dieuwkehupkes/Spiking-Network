@@ -203,7 +203,7 @@ class NeuralNetwork {
     int neuronIndex = findNeuron(x, y);     // find index neuron mouse points at
     try {
       Neuron neuron = neurons[neuronIndex];
-      neuron.setI(40);   // give activation to the neuron
+      neuron.setI(80);   // give activation to the neuron
      } catch (ArrayIndexOutOfBoundsException e) {
        // do nothing if mouse points outside of network
     }
@@ -252,7 +252,7 @@ class NeuralNetwork {
      * Print the connections between the
      * neurons in the network
      */
-    int counter = 1;
+    int counter = 0;
     for (Neuron neuron : neurons) {
       System.out.println("Neuron "+counter+ " receives input from:");
       for (int i=0; i<neuron.numNeighbours; i++) {
@@ -318,6 +318,7 @@ class NeuralNetwork {
     for (Neuron neuron : this.neurons) {
       neuron.trainingMode = this.trainingMode;  // change training mode neurons
     }
+    network.printConnections();
   }
 
   public void setTrainingMethod(Training trainingMethod) {
