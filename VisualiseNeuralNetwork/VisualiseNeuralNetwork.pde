@@ -14,6 +14,7 @@ Training trainingFunction = new HeuristicalHebbian();   // training function for
 // variables to use for visualisation
 boolean mouseP = false;         // indicates whether mouse is pressed
 boolean trainingMode = false;   // indicate whether network is in training mode
+int simulationSpeed = 200;
 
 NeuralNetwork network;
 
@@ -22,7 +23,7 @@ void setup() {
   int width = Nw*Ncol + 5;
   int height = int(Nw*Nn/Ncol) + 5;
   size(width, height);
-  frameRate(200);    // Nb: frame rate only corresponds with real time
+  frameRate(simulationSpeed);    // Nb: frame rate only corresponds with real time
                      // when enough processing power is available
 
   Neuron[] n = new Neuron[Nn];
@@ -69,6 +70,12 @@ void mouseReleased() {
 void keyPressed() {
   // specify what happens when a key is pressed
   // not implemented yet
+  if (key=='+'|| key=='-') {    // change simulationSpeed
+    simulationSpeed = (key=='+') ? simulationSpeed+10 : simulationSpeed -10;    //change speed
+    if (simulationSpeed <=0) simulationSpeed = 1;
+    System.out.println("new frameRate"+ simulationSpeed);
+    frameRate(simulationSpeed);
+  }
   if (key=='q' || key=='Q') exit();
   if (key=='t' || key=='T') {   // toggle training mode
     trainingMode = trainingMode ? false : true;
