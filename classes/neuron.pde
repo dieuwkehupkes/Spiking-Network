@@ -7,7 +7,6 @@ class Neuron {
   private float I;      // extrenal input to neuron
   boolean fired = false;
   boolean trainingMode = false;
-  Training training = new HeuristicalHebbian();     // Change this later to be part of network
   float timeStep = 0.1;
 
   NeuralNetwork network;    // the network the neuron is part of
@@ -128,7 +127,7 @@ class Neuron {
      */
     // loop over neurons with which a connection is already established
     for (int i=0; i < this.numNeighbours; i++) {
-    float update = training.updateExistingConnection(this, network.neurons[i]);
+      float update = network.training.updateExistingConnection(this, network.neurons[i]);
     }
 
     rmLowConnections();     // remove connections below minimum weight of the network
@@ -136,7 +135,7 @@ class Neuron {
     // loop over close neurons to see if a connection should be established
     int i = 0;
     while (numNeighbours < maxNumNeighbours && i < potentialNeighbours.length) {
-      // training.updateNonExistingConnection(this, potentialNeighbours[i]);
+      network.training.updateNonExistingConnection(this, network.neurons[potentialNeighbours[i]]);
       i++;
     }
 

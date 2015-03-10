@@ -39,6 +39,7 @@ void setup() {
   a.setProbabilityFunction(probFunction);
   network.setArchitecture(a);
   network.addConnections();
+  network.setTrainingMethod(trainingFunction);
 
   network.display();
   

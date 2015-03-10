@@ -8,7 +8,8 @@ class NeuralNetwork {
   private int Nw;       // pixel width of the neurons (for visualisation)
 
   Neuron neurons[];     // the neurons forming the network
-  Architecture architecture;     // the architecture of the network
+  Architecture architecture;    // the architecture of the network
+  Training training;            // the way the weights are updated in training mode
 
   private int[] indices;        // indices to loop over the neurons of the network
 
@@ -319,6 +320,13 @@ class NeuralNetwork {
     }
   }
 
+  public void setTrainingMethod(Training trainingMethod) {
+    /**
+     * Set method for training
+     */
+    this.training = trainingMethod;
+  }
+
   // Getters
   
   public int getMaxNumNeighbours() {
@@ -369,6 +377,14 @@ class NeuralNetwork {
      * training mode false otherwise
      */
     return this.trainingMode;
+  }
+
+  public Training getTrainingMethod() {
+    /**
+     * Return method of training for the
+     * network
+     */
+    return this.training;
   }
 
 }
