@@ -16,12 +16,15 @@ abstract class Architecture {
   private DistanceMetric distanceMetric;            // Distance metric used in tha architecture
   private ProbabilityFunction probabilityFunction;  // Function used to compute how likely a
                                                     // neuron is to connect with another neuron
+  private int potentialNumNeighbours;               // number of neurons that are a potential
+                                                    // neighbour of each neuron
 
   // Constructor
   public Architecture(int maxNumNeighbours, float minWeight, float maxWeight) {
     setMaxNumNeighbours(maxNumNeighbours);
     setMaxWeight(maxWeight);
     setMinWeight(minWeight);
+    potentialNumNeighbours = 5*maxNumNeighbours;     // default value potential neighbours
   }
 
   // Methods
