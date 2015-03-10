@@ -7,7 +7,8 @@ class Neuron {
   private float I;      // extrenal input to neuron
   boolean fired = false;
   boolean trainingMode = false;
-  float lastTimeFired;
+  int lastTimeFired;    // last round the neuron fired
+  int round=0;            // cur round
   float timeStep = 0.1;
 
   NeuralNetwork network;    // the network the neuron is part of
@@ -72,13 +73,14 @@ class Neuron {
 
     // if potential crosses threshold, reset
 
-    resetI();    // reset the input that was used to compute the update
+    resetI();   // reset the input that was used to compute the update
+    round++;    // increase round
 
     if (v>30) {
       v=c;
       u=u+d;
       this.fired = true;
-      this.lastTimeFired=millis();
+      this.lastTimeFired = round;
       return;
     }
 
