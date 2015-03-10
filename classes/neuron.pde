@@ -132,6 +132,7 @@ class Neuron {
     // loop over neurons with which a connection is already established
     for (int i=0; i < this.numNeighbours; i++) {
       float update = network.training.updateExistingConnection(this, network.neurons[i]);
+      weights[i] = ( weights[i]+update < network.getMinWeight() || weights[i]+update > network.getMaxWeight()) ? weights[i] : weights[i]+update;
     }
 
     rmLowConnections();     // remove connections below minimum weight of the network
