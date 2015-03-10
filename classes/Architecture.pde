@@ -30,16 +30,17 @@ abstract class Architecture {
   // Methods
   public void generateConnections(NeuralNetwork network) {
     network.initNeighbours(maxNumNeighbours());     // create arrays for weights and neighbours
-    for (Neuron neuron : network.neurons) {     // add connections for all neurons
-      addConnections(network, neuron);
+    for (int i=0; i<network.Nn; i++) {     // add connections for all neurons
+      addConnections(network, i);
     }
   }
 
-  abstract protected void addConnections(NeuralNetwork network, Neuron n);  // add connections for 1 neuron
+  abstract protected void addConnections(NeuralNetwork network, int neuronI);  // add connections for 1 neuron
 
  // Setters
 
-  public void setDistanceMetric(DistanceMetric distanceMetric) {
+  public void setDistanceMetric(DistanceMetric distanceMetric, int neuronWidth) {
+    distanceMetric.setNeuronWidth(neuronWidth);
     this.distanceMetric = distanceMetric;
   }
 
