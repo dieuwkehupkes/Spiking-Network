@@ -1,10 +1,10 @@
 // Parameters for visual network
-int Nexhib = 800;               // number of random exhibitory neurons
-int Ninhib = 400;               // number of random inhibitory neurons
+int Nexhib = 8;               // number of random exhibitory neurons
+int Ninhib = 4;               // number of random inhibitory neurons
 int Nn = Nexhib + Ninhib;       // total number of neurons
-int Ncol=40;                    // number of columns
-int Nw=20;                      // neuron width
-int maxNumNeighbours=50;        // maximum nr of neigbours for neuron
+int Ncol=4;                    // number of columns
+int Nw=40;                      // neuron width
+int maxNumNeighbours=10;        // maximum nr of neigbours for neuron
 float minWeight=-5.0;           // minimal weight between neurons
 float maxWeight=15.0;           // maximum weight between neurons
 DistanceMetric distMetric = new ManhattanDistance();        // distance metric used
@@ -14,7 +14,7 @@ Training trainingFunction = new HeuristicalHebbian();   // training function for
 // variables to use for visualisation
 boolean mouseP = false;         // indicates whether mouse is pressed
 boolean trainingMode = false;   // indicate whether network is in training mode
-int simulationSpeed = 200;
+int simulationSpeed = 50;
 
 NeuralNetwork network;
 
@@ -36,7 +36,7 @@ void setup() {
   network.addNeurons(neuronDistr, Ncol, Nw);
 
   Architecture a = new Neighbour(maxNumNeighbours, minWeight, maxWeight);
-  a.setDistanceMetric(distMetric);
+  a.setDistanceMetric(distMetric, Nw);
   a.setProbabilityFunction(probFunction);
   network.setArchitecture(a);
   network.addConnections();
@@ -48,7 +48,7 @@ void setup() {
 
 void draw() {
 
-  float I = random(4.0);
+  float I = random(2.0);
 
   if (mouseP) network.mousePressed(mouseX, mouseY);
   network.update(I);
@@ -79,8 +79,7 @@ void keyPressed() {
   if (key=='q' || key=='Q') exit();
   if (key=='t' || key=='T') {   // toggle training mode
     trainingMode = trainingMode ? false : true;
-    network.toggleTrainingMode();
     String print = trainingMode ? "Training mode on" : "Training mode off";
-    System.out.println(print);
+    network.toggleTrainingMode();
   }
 }
