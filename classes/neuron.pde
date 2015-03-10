@@ -7,6 +7,7 @@ class Neuron {
   private float I;      // extrenal input to neuron
   boolean fired = false;
   boolean trainingMode = false;
+  float lastTimeFired;
   float timeStep = 0.1;
 
   NeuralNetwork network;    // the network the neuron is part of
@@ -77,6 +78,7 @@ class Neuron {
       v=c;
       u=u+d;
       this.fired = true;
+      this.lastTimeFired=millis();
       return;
     }
 
@@ -150,6 +152,7 @@ class Neuron {
      * CONNECTIONS
      */
     int i = 0;      // index of neighbour
+    /*
     while (i < numNeighbours) {
       if (weights[i] < network.architecture.minWeight()) {      // remove weights that are too low
         weights[i] = weights[numNeighbours-1];      // remove connection and
@@ -161,6 +164,7 @@ class Neuron {
         i++;
       }
     }
+    */
   }
 
   public void display() {
