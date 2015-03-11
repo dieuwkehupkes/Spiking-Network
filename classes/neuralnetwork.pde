@@ -318,7 +318,7 @@ class NeuralNetwork {
     for (Neuron neuron : this.neurons) {
       neuron.trainingMode = this.trainingMode;  // change training mode neurons
     }
-    network.printConnections();
+    printConnections();
   }
 
   public void setTrainingMethod(Training trainingMethod) {

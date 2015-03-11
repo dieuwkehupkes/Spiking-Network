@@ -139,7 +139,7 @@ class Neuron {
     
     // loop over close neurons to see if a connection should be established
     int i = 0;
-    while (numNeighbours < maxNumNeighbours && i < potentialNeighbours.length) {
+    while (numNeighbours < network.getMaxNumNeighbours() && i < potentialNeighbours.length) {
       network.training.updateNonExistingConnection(this, network.neurons[potentialNeighbours[i]]);
       i++;
     }
