@@ -1,7 +1,7 @@
 import org.junit.Test;
 import org.junit.*;
 
-class NeuronTest extends UnitTest {
+public class NeuronTest extends UnitTest {
   /**
    * Tests for methods in
    * neuron
@@ -22,4 +22,48 @@ class NeuronTest extends UnitTest {
       Assert.assertEquals(neuron.u, 6.0, 10e-10);
     }
 
+  @Test
+    public void testComputeNextNoSpike() {
+      System.out.println("write test");
+    }
+
+  @Test
+    public void testComputeNextSpike() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testUpdateNoInput() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testUpdateThalamicInput() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testTimeFired() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testUpdateWeights() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testRemoveLowConnections() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testRemoveConnections() {
+      System.out.println("Write test");
+    }
+
+  @Test
+    public void testSetConnections() {
+      System.out.println("Write test");
+    }
 }

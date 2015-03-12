@@ -10,8 +10,8 @@
 
 void setup() {
 
-  // NeuronTest neuronTest = new NeuronTest();
-  // neuronTest.testAll();
+  NeuronTest neuronTest = new NeuronTest();
+  neuronTest.testAll();
   System.out.println("Testing finished");
   exit();
 

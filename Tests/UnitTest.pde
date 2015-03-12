@@ -36,15 +36,27 @@ import org.junit.internal.builders.*;
 
 abstract class UnitTest {
 
-  public void testAll() throws IllegalAccessException, InvocationTargetException {
+  public void testAll() {
     /**
      * Execute all methods available in
      * the test class.
      */
-    // import java.lang.reflect.method
-    Method[] methods = this.getClass().getMethods();
+    
+    Method[] methods = this.getClass().getDeclaredMethods();
+
     for (Method m : methods) {
-      m.invoke(null);
+      if (m.getName() == "testAll") {
+      } else {
+        try {
+          m.invoke(this);
+        } catch (IllegalAccessException e) {
+          System.out.println("IllegalAccessException when trying to access test methods");
+        } catch (InvocationTargetException e) {
+          System.out.println("InvocationTargetException when trying to access test methods");
+        } catch (NullPointerException e) {
+          System.out.println("NullPointerException should not be thrown!");
+        }
+      }
     }
   }
 }
