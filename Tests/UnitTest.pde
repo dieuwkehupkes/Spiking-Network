@@ -42,18 +42,18 @@ abstract class UnitTest {
      * the test class.
      */
     
-    Method[] methods = this.getClass().getDeclaredMethods();
+    Method[] methods = this.getClass().getDeclaredMethods();    // get all declared methods
 
     for (Method m : methods) {
-      if (m.getName() == "testAll") {
+      if (m.getName() == "testAll") {   // don't execute this method
       } else {
         try {
           m.invoke(this);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {    // this should not occur, print if it does
           System.out.println("IllegalAccessException when trying to access test methods");
-        } catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {   // this should not occur, print if it does
           System.out.println("InvocationTargetException when trying to access test methods");
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e) {   // this should not occur, print if it does
           System.out.println("NullPointerException should not be thrown!");
         }
       }
