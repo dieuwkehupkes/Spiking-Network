@@ -17,6 +17,7 @@ public class Visualise extends PApplet {
 	 * 
 	 */
 
+	// serial ID for serializable class
 	private static final long serialVersionUID = 7416187811109690854L;
 
 	// Parameters for visual network
