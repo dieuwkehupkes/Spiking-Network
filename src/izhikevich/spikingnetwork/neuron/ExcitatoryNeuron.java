@@ -1,7 +1,5 @@
 package izhikevich.spikingnetwork.neuron;
 
-import processing.core.*;
-
 public class ExcitatoryNeuron extends Neuron {
 	/**
 	 * class for excitatory neurons, i.e.:

@@ -40,7 +40,6 @@ public class Visualise extends PApplet {
 		frameRate(simulationSpeed);    // Nb: frame rate only corresponds with real time
 		// when enough processing power is available
 
-		Neuron[] n = new Neuron[Nn];
 		HashMap<String, Integer> neuronDistr = new HashMap<String, Integer>();   // nrs of diff neuron types
 
 		neuronDistr.put("ExcitatoryNeuron", Nexhib);

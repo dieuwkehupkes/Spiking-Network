@@ -1,7 +1,6 @@
 package izhikevich.spikingnetwork.training;
 
 import izhikevich.spikingnetwork.neuron.*;
-import izhikevich.spikingnetwork.training.*;
 
 public class HeuristicalHebbian implements Training {
 	// Heuristic implementation of Hebbian learning

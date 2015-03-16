@@ -1,7 +1,6 @@
 package izhikevich.spikingnetwork.distancemetric;
 
 import izhikevich.spikingnetwork.neuron.*;
-import java.lang.*;
 
 public class ManhattanDistance extends DistanceMetric {
 	/**

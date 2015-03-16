@@ -1,7 +1,6 @@
 package izhikevich.spikingnetwork.distancemetric;
 
 import izhikevich.spikingnetwork.neuron.Neuron;
-import java.lang.*;
 
 public class EuclideanDistance extends DistanceMetric {
 
