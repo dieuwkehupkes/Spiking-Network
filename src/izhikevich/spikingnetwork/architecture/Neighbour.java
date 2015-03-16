@@ -1,7 +1,7 @@
 package izhikevich.spikingnetwork.architecture;
 
 import izhikevich.spikingnetwork.neuron.*;
-import izhikevich.spikingnetwork.NeuralNetwork;
+import izhikevich.spikingnetwork.runnables.NeuralNetwork;
 
 
 public class Neighbour extends Architecture {

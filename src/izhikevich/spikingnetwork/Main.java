@@ -1,5 +1,7 @@
 package izhikevich.spikingnetwork;
 
+import izhikevich.spikingnetwork.runnables.Visualise;
+
 public class Main {
 	/**
 	 * 
