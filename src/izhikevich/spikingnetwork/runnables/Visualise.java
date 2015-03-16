@@ -13,6 +13,11 @@ import izhikevich.spikingnetwork.training.*;
 import izhikevich.spikingnetwork.architecture.*;
 
 public class Visualise extends PApplet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	// Parameters for visual network
 	int Nexhib = 800;               // number of random exhibitory neurons
 	int Ninhib = 400;               // number of random inhibitory neurons
@@ -96,6 +101,7 @@ public class Visualise extends PApplet {
 		if (key=='t' || key=='T') {   // toggle training mode
 			trainingMode = trainingMode ? false : true;
 			String print = trainingMode ? "Training mode on" : "Training mode off";
+			System.out.println(print);
 			network.toggleTrainingMode();
 		}
 	}
