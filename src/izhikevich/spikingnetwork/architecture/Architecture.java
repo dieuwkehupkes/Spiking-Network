@@ -1,8 +1,8 @@
 package izhikevich.spikingnetwork.architecture;
 
-import izhikevich.spikingnetwork.*;
 import izhikevich.spikingnetwork.distancemetric.*;
 import izhikevich.spikingnetwork.probabilityfunction.*;
+import izhikevich.spikingnetwork.runnables.NeuralNetwork;
 
 public abstract class Architecture {
 	/**
