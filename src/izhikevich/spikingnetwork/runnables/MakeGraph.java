@@ -4,6 +4,11 @@ import processing.core.*;
 import izhikevich.spikingnetwork.neuron.*;
 
 public class MakeGraph extends PApplet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1066206885220849095L;
+
 	/*
 	 * class to reproduce the figures
 	 * in Izhikevich (year?).

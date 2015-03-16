@@ -16,7 +16,8 @@ public class Visualise extends PApplet {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 7416187811109690854L;
 
 	// Parameters for visual network
 	int Nexhib = 800;               // number of random exhibitory neurons
