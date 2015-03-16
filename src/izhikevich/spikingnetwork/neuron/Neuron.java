@@ -1,7 +1,6 @@
 package izhikevich.spikingnetwork.neuron;
 
 import izhikevich.spikingnetwork.*;
-import izhikevich.spikingnetwork.runnables.NeuralNetwork;
 
 public class Neuron {
 	/**
