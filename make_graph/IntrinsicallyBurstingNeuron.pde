@@ -1,1 +1,0 @@
-../classes/IntrinsicallyBurstingNeuron.pde
