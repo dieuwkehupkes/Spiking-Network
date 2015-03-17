@@ -42,7 +42,7 @@ public class Neuron {
 	    this.d = d;
 	  }
 
-	  public float[][] show_spike_behaviour(double I, int nr_of_steps) {
+	  public float[][] plot_v(double I, int nr_of_steps) {
 	    // Show behaviour of neuron as a result of a constant input current
 	    
 	    float[][] time_potential = new float[nr_of_steps][2];     // declare array to store output
@@ -63,6 +63,22 @@ public class Neuron {
 	    
 	    return time_potential;
 	  }
+	  
+	  public float[][] plot_u(double I, int nr_of_steps) {
+		  // Show course of v as result of constant input I
+		  
+		  float[][] time_u = new float[nr_of_steps][2];
+		  
+		  for (int i=0; i<nr_of_steps; i++) {
+			  double cur_time = i*0.1;
+			  time_u[i][0] = (float) cur_time;
+			  time_u[i][1] = (float) u;
+			  computeNext(I);
+		  }
+		return time_u;
+
+	  }
+
 
 	  void setTimeStep(double timeStep) {
 	    // Set the timestep for updating
