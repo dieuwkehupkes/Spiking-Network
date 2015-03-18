@@ -7,6 +7,11 @@ import java.util.*;
 
 public class NeuralNetwork {
 	// Fields
+	// TODO It is actually a bit nonsensical that a network needs to
+	// have a number of columns and a neuronWidth even if we do not want
+	// to visualise it, you should change this such that it is also possible
+	// to create a network and just print parts of its behaviour
+	
 	public int Nn;       // number of neurons
 	private int Ncol;     // number of columns
 	private int Nw;       // pixel width of the neurons (for visualisation)
@@ -180,6 +185,26 @@ public class NeuralNetwork {
 			neurons[i].setNw(Nw);
 		}
 		
+	}
+	
+	public float[][] plotV(int neuronIndex, int nr_of_steps) {
+		/**
+		 * Return an array representing the behaviour of
+		 * the neuron with index neuronIndex
+		 */
+		
+		float[][] time_potential = new float[nr_of_steps][2];
+		
+		// compute behaviour
+		for (int i=0; i<nr_of_steps; i++) {
+			double cur_time = i*0.1;
+			time_potential[i][0] = (float) cur_time;
+			time_potential[i][1] = (float) this.neurons[neuronIndex].v;
+		}
+		
+		this.update();
+		
+		return time_potential;
 	}
 
 	public void initNeighbours(int maxNumNeighbours) {
