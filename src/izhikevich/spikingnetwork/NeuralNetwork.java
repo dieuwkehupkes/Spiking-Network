@@ -11,7 +11,7 @@ public class NeuralNetwork {
 	// have a number of columns and a neuronWidth even if we do not want
 	// to visualise it, you should change this such that it is also possible
 	// to create a network and just print parts of its behaviour
-	
+
 	public int Nn;       // number of neurons
 	private int Ncol;     // number of columns
 	private int Nw;       // pixel width of the neurons (for visualisation)
@@ -177,33 +177,58 @@ public class NeuralNetwork {
 		 * on the grid, based on the total number of neurons,
 		 * columns and the neuron width
 		 */
-		
+
 		// set x and y
 		for (int i=0; i<Nn; i++) {
 			neurons[i].setX((i%Ncol)*Nw + 5);
 			neurons[i].setY(((int)(i/Ncol))*Nw + 5);
 			neurons[i].setNw(Nw);
 		}
-		
+
 	}
 	
+	public int getNrOfSpikes(int neuronIndex, int nr_of_steps) {
+		/**
+		 * Return the number of spikes a neuron produces in
+		 * a certain interval
+		 */
+		
+		int nrOfSpikes = 0;
+		
+		for (int i=0; i<nr_of_steps; i++) {
+			this.update();
+			
+			if (this.neurons[neuronIndex].fired) nrOfSpikes++;
+			
+		}
+		
+		return nrOfSpikes;
+	}
+
 	public float[][] plotV(int neuronIndex, int nr_of_steps) {
 		/**
 		 * Return an array representing the behaviour of
 		 * the neuron with index neuronIndex
 		 */
-		
+
 		float[][] time_potential = new float[nr_of_steps][2];
-		
+		int nr_of_spikes = 0;
+
 		// compute behaviour
 		for (int i=0; i<nr_of_steps; i++) {
 			double cur_time = i*0.1;
 			time_potential[i][0] = (float) cur_time;
 			time_potential[i][1] = (float) this.neurons[neuronIndex].v;
+			// System.out.println("v before "+this.neurons[neuronIndex].v);
+
+			this.update();
+			// System.out.println("v after "+this.neurons[neuronIndex].v);
+
+			if (this.neurons[neuronIndex].fired) nr_of_spikes++; 
 		}
-		
-		this.update();
-		
+
+		System.out.println(nr_of_spikes);
+
 		return time_potential;
 	}
 
@@ -257,7 +282,24 @@ public class NeuralNetwork {
 		randomiseArray(indices);    // randomise update order
 		for (int i=0; i<Nn; i++) {
 			Integer j = indices[i];
-			getNeuron(j).update(I);
+			update(j, I);
+		}
+	}
+
+	private void update(int neuronIndex, double I) {
+		/**
+		 * Update the neuron with index neuronIndex
+		 */
+		this.neurons[neuronIndex].update(I);
+	}
+	
+	public void reset() {
+		/**
+		 * Reset the neurons of the network to their
+		 * initial values
+		 */
+		for (Neuron neuron : this.neurons) {
+			neuron.reset();
 		}
 	}
 
@@ -408,7 +450,7 @@ public class NeuralNetwork {
 
 		return neurons;
 	}
-	
+
 	public Neuron getNeuron(int i) {
 		/**
 		 * get Neuron with index i
