@@ -27,7 +27,7 @@ public class HeuristicalHebbian implements Training {
 		return update;
 	}
 
-	public double findIncrement(int fireTime1, int fireTime2) {
+	public double findIncrement(double fireTime1, double fireTime2) {
 		/**
 		 * Compute increment based on how far apart
 		 * the two neurons fired.
