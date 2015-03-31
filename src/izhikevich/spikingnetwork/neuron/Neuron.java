@@ -12,9 +12,10 @@ public class Neuron {
 	private double I;      // external input to neuron
 	public boolean fired = false;
 	private boolean trainingMode = false;
-	public int lastTimeFired;    // last round the neuron fired
-	public int t=0;            // cur round
+	public double lastTimeFired;    // last round the neuron fired
+	public double t=0;            // cur round
 	public double timeStep = 0.1;
+	private double spikeDuration = 1;
 
 	public NeuralNetwork network;    // the network the neuron is part of
 	private int neighbours[];     // indices pointing to the neighbours of the neuron
@@ -92,20 +93,23 @@ public class Neuron {
 
 		// if potential crosses threshold, reset
 
-		t+=this.timeStep;    // increase round
+		this.t+=this.timeStep;    // increase round
 
 		if (this.v>30) {
 			this.v=this.c;
 			this.u=this.u+this.d;
 			this.fired = true;
-			this.lastTimeFired = t;
+			this.lastTimeFired = this.t;
 			return;
 		}
 
 		this.v=this.v+0.5*this.timeStep*(0.04*Math.pow(v,2)+5*v+140-u+I); //% step 0.5 ms
 		this.v=this.v+0.5*this.timeStep*(0.04*Math.pow(v,2)+5*v+140-u+I); //% for numerical
 		u=u+this.timeStep*a*(b*this.v-u); //% stability
-		fired = false;
+        if (this.spikeDuration <= this.t - this.lastTimeFired) {
+        	this.fired = false;
+        }
+        // this.fired = false;
 	}
 
 	void update() {
