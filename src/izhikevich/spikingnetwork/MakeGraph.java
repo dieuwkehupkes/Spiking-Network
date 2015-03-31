@@ -20,6 +20,12 @@ public class MakeGraph extends PApplet {
 		PFont f = createFont("Arial",16,true);
 		textFont(f, 16);
 		fill(0);
+		
+		double timeStep = 0.01;
+		int steps = (int) (200/timeStep);
+		int steps05 = (int) (0.5*steps);
+		int steps005 = (int) (0.05*steps);
+		int steps045 = (int) (0.45*steps);
 
 		// create neurons
 		RegularSpikingNeuron n1 = new RegularSpikingNeuron();    // regular spiking
@@ -29,58 +35,67 @@ public class MakeGraph extends PApplet {
 		Neuron n5 = new Neuron(0.02, 0.25, -65, 0.05);     // thalamo-cortical
 		Neuron n6 = new Neuron(0.1, 0.23, -65, -1);     // resonator
 		Neuron n7 = new Neuron(0.02, 0.25, -65, 2);   // low-threshold spiking
+		
+		n1.timeStep = timeStep;
+		n2.timeStep = timeStep;
+		n3.timeStep = timeStep;
+		n4.timeStep = timeStep;
+		n5.timeStep = timeStep;
+		n6.timeStep = timeStep;
+		n7.timeStep = timeStep;
 
 		// create data arrays with their behaviour
-		float[][] plotdata1 = n1.show_spike_behaviour(10, 2000);
-		float[][] plotdata2 = n2.show_spike_behaviour(10, 2000);
-		float[][] plotdata3 = n3.show_spike_behaviour(10, 2000);
-		float[][] plotdata4 = n4.show_spike_behaviour(10, 2000);
+		float[][] plotdata1 = n1.plot_v(10, steps);
+		float[][] plotdata2 = n2.plot_v(10, steps);
+		float[][] plotdata3 = n3.plot_v(10, steps);
+		float[][] plotdata4 = n4.plot_v(10, steps);
 
-		n5.show_spike_behaviour(0, 100); float[][] plotdata5 = n5.show_spike_behaviour(1, 2000);
-
-		float[][] n6plt1 = n6.show_spike_behaviour(1.5, 900);
-		float[][] n6plt2 = n6.show_spike_behaviour(3, 100);
-		float[][] n6plt3 = n6.show_spike_behaviour(1.5, 1000);
-
-		float[][] plotdata8 = n7.show_spike_behaviour(10, 2000);
+		n5.plot_v(0, steps005); float[][] plotdata5 = n5.plot_v(1, steps);
 
 		n5.reset();
-		float[][] n5plt1 = n5.show_spike_behaviour(-25, 1000);
-		float[][] n5plt2 = n5.show_spike_behaviour(0, 1000);
-		float[][] plotdata6 = new float[2000][2];
-		float[][] plotdata7 = new float[2000][2];
+		float[][] n5plt1 = n5.plot_v(-25, steps05);
+		float[][] n5plt2 = n5.plot_v(0, steps05);
+
+		float[][] n6plt1 = n6.plot_v(1.5, steps045);
+		float[][] n6plt2 = n6.plot_v(3, steps005);
+		float[][] n6plt3 = n6.plot_v(1.5, steps05);
+
+		float[][] plotdata8 = n7.plot_v(10, steps);
+
+		float[][] plotdata6 = new float[steps][2];
+		float[][] plotdata7 = new float[steps][2];
 
 		// create arrays for neurons with input variation 
-		for (int i=0; i<1000; i++) {
-			int j = i+1000;
+		for (int i=0; i<steps05; i++) {
+			int j = i+steps05;
 			plotdata6[i] = n5plt1[i];
-			plotdata6[j][0] = n5plt2[i][0]+100;
+			plotdata6[j][0] = n5plt2[i][0]+90;
 			plotdata6[j][1] = n5plt2[i][1];
 
-			if (i<900) { // in first bit of input
+			if (i<steps045) { // in first bit of input
 				plotdata7[i] = n6plt1[i];
 			}
 			else { // in extra input bit
-				plotdata7[i][1] = n6plt2[i-900][1]; plotdata7[i][0] = n6plt2[i-900][0] + 90;
+				plotdata7[i][1] = n6plt2[i-steps045][1]; plotdata7[i][0] = n6plt2[i-steps045][0] + 90;
 			}
 
-			plotdata7[j][0] = n6plt3[i][0]+100;
+			plotdata7[j][0] = n6plt3[i][0]+90;
 			plotdata7[j][1] = n6plt3[i][1];
 		}
 
-		for (int i=0; i<100; i++) {
-			plotdata7[i+900][1] = n6plt2[i][1];
+		for (int i=0; i<steps005; i++) {
+			plotdata7[i+steps045][1] = n6plt2[i][1];
 		}
 
 		// transform to plot
-		float[][] plt1 = shift_and_scale(plotdata1, 20, 90, 0.9, 1);
-		float[][] plt2 = shift_and_scale(plotdata2, 260, 90, 0.9, 1);
-		float[][] plt3 = shift_and_scale(plotdata3, 500, 100, 0.9, 1);
-		float[][] plt4 = shift_and_scale(plotdata4, 740, 100, 0.9, 1);
-		float[][] plt5 = shift_and_scale(plotdata5, 20, 290, 0.9, 1);
-		float[][] plt6 = shift_and_scale(plotdata6, 260, 290, 0.9, 1);
-		float[][] plt7 = shift_and_scale(plotdata7, 500, 290, 0.9, 1);
-		float[][] plt8 = shift_and_scale(plotdata8, 740, 290, 0.9, 1);
+		float[][] plt1 = Collection.shift_and_scale(plotdata1, 20, 90, 0.9, 1);
+		float[][] plt2 = Collection.shift_and_scale(plotdata2, 260, 90, 0.9, 1);
+		float[][] plt3 = Collection.shift_and_scale(plotdata3, 500, 100, 0.9, 1);
+		float[][] plt4 = Collection.shift_and_scale(plotdata4, 740, 100, 0.9, 1);
+		float[][] plt5 = Collection.shift_and_scale(plotdata5, 20, 290, 0.9, 1);
+		float[][] plt6 = Collection.shift_and_scale(plotdata6, 260, 290, 0.9, 1);
+		float[][] plt7 = Collection.shift_and_scale(plotdata7, 500, 290, 0.9, 1);
+		float[][] plt8 = Collection.shift_and_scale(plotdata8, 740, 290, 0.9, 1);
 
 		// plot data
 		float[][][] plot_data = {plt1, plt2, plt3, plt4, plt5, plt6, plt7, plt8};
@@ -104,32 +119,15 @@ public class MakeGraph extends PApplet {
 		// text("a=0.02, b=0.2\nc=-50, d=1.2\nnr of spikes=26", 40, 200);
 		// text("a=0.1, b=0.2\nc=-65, d=2\nnr of spikes=26", 270, 200);
 
-		// save("../Graphs/test.jpg");
+		// save("../graphs/izhikevich_timestep01.jpg");
 
-	}
-
-	public float[][] shift_and_scale(float[][] input, int shiftx, int shifty, double d, float scaley) {
-		// function for shifting and scaling values to plot them
-		float[][] output = new float[input.length][input[0].length];
-
-		int counter = 0;
-		for (float[] tuple: input) {
-			output[counter]=tuple;
-
-			// apply scaling and shifting of time variable
-			output[counter][0] += shiftx;
-			output[counter][0] *= d;
-
-			// apply scaling and shifting of potential variable
-			output[counter][1] *= -1;        // flip sign to get direction right
-			output[counter][1] += shifty;
-			output[counter][1] *= scaley;
-
-			// increase counter
-			counter++;
-		}
-
-		return output;
 	}
 	
+	public void draw() {
+	}
+	
+	public void keyPressed() {
+		exit();
+	}
+
 }
