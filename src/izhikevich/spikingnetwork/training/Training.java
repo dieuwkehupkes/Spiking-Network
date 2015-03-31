@@ -16,6 +16,6 @@ public interface Training {
 
 	  public double updateNonExistingConnection(Neuron n1, Neuron n2);
 
-	  public double findIncrement(int t1, int t2);
+	  public double findIncrement(double t1, double t2);
 	
 }
