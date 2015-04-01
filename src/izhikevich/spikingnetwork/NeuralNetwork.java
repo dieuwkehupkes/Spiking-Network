@@ -199,7 +199,6 @@ public class NeuralNetwork {
 			this.update();
 			
 			if (this.neurons[neuronIndex].fired) nrOfSpikes++;
-			
 		}
 		
 		return nrOfSpikes;
@@ -224,7 +223,7 @@ public class NeuralNetwork {
 			this.update();
 			// System.out.println("v after "+this.neurons[neuronIndex].v);
 
-			if (this.neurons[neuronIndex].fired) nr_of_spikes++; 
+			if (this.neurons[neuronIndex].fired) nr_of_spikes++;
 		}
 
 		System.out.println(nr_of_spikes);

@@ -11,6 +11,7 @@ public class Neuron {
 	public double v;        // u and v when they were last computed
 	private double I;      // external input to neuron
 	public boolean fired = false;
+	public boolean firing = false;
 	private boolean trainingMode = false;
 	public double lastTimeFired;    // last round the neuron fired
 	public double t=0;            // cur round
@@ -57,7 +58,7 @@ public class Neuron {
 			time_potential[i][0] = (float) cur_time;
 			time_potential[i][1] = (float) v;
 			computeNext(input);
-			if (fired) nr_of_spikes++;
+			if (this.fired) nr_of_spikes++; 
 		}
 
 		System.out.print(nr_of_spikes++);
@@ -99,6 +100,7 @@ public class Neuron {
 			this.v=this.c;
 			this.u=this.u+this.d;
 			this.fired = true;
+			this.firing = true;
 			this.lastTimeFired = this.t;
 			return;
 		}
@@ -107,9 +109,11 @@ public class Neuron {
 		this.v=this.v+0.5*this.timeStep*(0.04*Math.pow(v,2)+5*v+140-u+I); //% for numerical
 		u=u+this.timeStep*a*(b*this.v-u); //% stability
         if (this.spikeDuration <= this.t - this.lastTimeFired) {
-        	this.fired = false;
+        	this.firing = false;
         }
-        // this.fired = false;
+
+        // this.firing = false;
+        this.fired = false;
 	}
 
 	void update() {
@@ -137,7 +141,7 @@ public class Neuron {
 
 		double neighbourActivation = 0;
 		for (int i=0; i<numNeighbours; i++) {
-			if (network.getNeurons()[getNeighbours()[i]].fired) neighbourActivation+=getWeights()[i];
+			if (network.getNeurons()[getNeighbours()[i]].firing) neighbourActivation+=getWeights()[i];
 		}
 		
 		// System.out.println("neighbour input = "+neighbourActivation);
