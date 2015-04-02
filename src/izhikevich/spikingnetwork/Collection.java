@@ -29,8 +29,4 @@ public class Collection {
 		return output;	
 	}
 	
-	/*
-	public static float[][] shift_and_scale()
-	*/
-
 }
