@@ -20,7 +20,7 @@ public class Neuron {
 
 	public NeuralNetwork network;    // the network the neuron is part of
 	private int neighbours[];     // indices pointing to the neighbours of the neuron
-	private double weights[];        // weights to the neighbours
+	public double weights[];        // weights to the neighbours
 	public int numNeighbours = 0;
 	int numPotential = 30;        // CHANGE THIS LATER TO BE PART OF ARCHITECTURE!
 	int potentialNeighbours[] = new int[numPotential];        // indices pointing to potential neighbours
@@ -42,6 +42,29 @@ public class Neuron {
 		this.b = b;
 		this.c = c;
 		this.d = d;
+	}
+	
+	public int getNrOfSpikes(double I, int nrOfSteps) {
+		/**
+		 * Return the number of spikes the neuron produces
+		 * in a certain interval
+		 */
+		this.reset();
+		int nrOfSpikes = 0;
+		
+		for (int i=0; i<nrOfSteps; i++) {
+			this.update(I);
+			
+			if (this.fired) {
+				nrOfSpikes+=1;
+			}
+		}
+		
+		return nrOfSpikes;
+	}
+	
+	public int getNrOfSpikes(int nrOfSteps) {
+		return getNrOfSpikes(0, nrOfSteps);
 	}
 
 	public float[][] plot_v(double I, int nr_of_steps) {
@@ -140,12 +163,13 @@ public class Neuron {
 		// neighbours
 
 		double neighbourActivation = 0;
+		neighbours = getNeighbours();
 		for (int i=0; i<numNeighbours; i++) {
-			if (network.getNeurons()[getNeighbours()[i]].firing) neighbourActivation+=getWeights()[i];
+			if (network.getNeurons()[neighbours[i]].firing) {
+				neighbourActivation+=getWeights()[i];
+			}
 		}
 		
-		// System.out.println("neighbour input = "+neighbourActivation);
-
 		return neighbourActivation;
 	}
 
@@ -278,6 +302,11 @@ public class Neuron {
 		// increase I with activation
 		this.I = activation;
 	}
+	
+	public double I() {
+		// return I
+		return I;
+	}
 
 	public void set_v(double v) {
 		// Set v to a certain value
@@ -314,7 +343,9 @@ public class Neuron {
 
 	public void setNeighbours(int neighbours[]) {
 		this.neighbours = neighbours;
+		this.numNeighbours = neighbours.length;
 	}
+
 
 	public boolean isTrainingMode() {
 		return trainingMode;
