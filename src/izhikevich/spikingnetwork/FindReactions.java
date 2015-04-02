@@ -22,28 +22,37 @@ public class FindReactions extends PApplet {
 	float d = (float) 0.1;
 	double[] weights = {0, 0, 0};
 
+	// simulation length
+	int simLength = 500;
+
+	// scale fa8ctor
+	float scaleX = (float) 20;
+	float scaleY = (float) 10;
+
+	// start and endpoint of graph
+	float xStart =40; float xEnd = 850; float yStart = 800; float yEnd = 30;
+	
+	// benchmark values for scale graph
+	float xBenchValue = 1; float yBenchValue = 10;
+		
 	private static final long serialVersionUID = 7416187811109690854L;
 
 	public void setup() {
 
 		// setup window
-		size(900, 500);
+		size(1000, 900);
 		background(255);
 
 		// draw axis
-		float scaleX = (float) 10;
-		float scaleY = (float) 10;
 
-		int xStart = 30; int xEnd = 400; int yStart = 300; int yEnd = 30;
 		drawAxis(xStart, xEnd, yStart, yEnd);
-		int xBenchValue = 500; int yBenchValue = 500;
-		int xBench = (int) (xStart+xBenchValue/scaleX); int yBench = (int) (yStart - yBenchValue/scaleY);
+		System.out.println("Axis drawn");
+		float xBench = xStart+xBenchValue*scaleX; float yBench = yStart - yBenchValue*scaleY;
 		drawScale(xStart, xEnd, xBench, xBenchValue, yStart, yEnd, yBench, yBenchValue);
-		System.out.println("scaledrawn");
+		System.out.println("scale drawn");
 		
 		// set timestep
 		double timeStep = 0.1;
-		int simLength = 1000;
 
 		// create input neurons
 		n1 = new Neuron(a, b, c, d);	// regular spiking neuron
@@ -88,7 +97,9 @@ public class FindReactions extends PApplet {
 		// plotSpikesWeights(simLength, (float) 0.1, (float) 2., xStart, yStart);
 		
 		// plot nr of spikes against input frequence
-		plotSpikesInputFreq(simLength, scaleX, scaleY, xStart, yStart);
+		// plotSpikesInputFreq(simLength, scaleX, scaleY, xStart, yStart);
+		
+		plotDependencyD();
 
 		// save("../graphs/reactionsRS3RSi01.jpg");
 	}
@@ -97,27 +108,58 @@ public class FindReactions extends PApplet {
 
 	}
 	
-	private void plotSpikesInputFreq(int simLength, float scaleX, float scaleY, int x0, int y0) {
+	private void plotDependencyD() {
 		
-		fill(2);
-		weights[0] = 700; weights[1] = 700; weights[2] = 700;
+		fill(255);
+		rect(545, 75, 400, 340);
+		strokeWeight(8);
+		textSize(26);
+		fill(255,50,50);
+		stroke(255, 50, 50);
+		point(590, 90); point(580, 90); point(570, 90); point(560, 90);
+		text("Input neurons", 602, 100);
+		fill(0, 0, 0);
+		stroke(0);
+		text("Output neuron", 600, 225);
+		point(590, 215); point(580, 215); point(570, 215); point(560, 215);
+		
+		textSize(20);
+		text("a= "+a, 560, 125);
+		text("b= "+b, 560, 145);
+		text("c= "+c, 560, 165);
+
+		text("a= "+a, 560, 245);
+		text("b= "+b, 560, 265);
+		text("c= "+c, 560, 285);
+		text("d= "+d, 560, 305);
+		
+		weights[0] = 100; weights[1] = 100; weights[2] = 100;
 		o1.setWeights(weights);
 		
-		for (d= (float) 0.1; d<=20; d+=0.2) {
-			n1.setParameters(a, b, c, d);
-			n2.setParameters(a, b, c, d);
-			n3.setParameters(a, b, c, d);
+		textSize(24);
+		text("d", 450, 850);
+		text("#spikes", 20, 25);
+		
+
+		save("../graphs/dependencyD.jpg");
+		
+		strokeWeight(5);
+		
+		for (float k = (float) 0.1; k<=40; k+=0.1) {
+			n1.setParameters(a, b, c, k);
+			n2.setParameters(a, b, c, k);
+			n3.setParameters(a, b, c, k);
 			
-			int spikes = network.getNrOfSpikes(3, 20);
-			// int spikes1 = network.getNrOfSpikes(0, 20);
-			// network.plotV(0, simLength);
-			// int spikes2 = n1.getNrOfSpikes(simLength);
-			// int spikes3 = n2.getNrOfSpikes(simLength);
+			int spikes = network.getNrOfSpikes(3, simLength);
+			int spikes1 = network.getNrOfSpikes(0, simLength);
 			
-			//System.out.println("d: "+d+"\tspikes: "+spikes+"\tspikes1: "+spikes1);
-			// System.out.println("d: "+d+"\tspikes: "+spikes);
+			// System.out.println("d: "+d+"\tspikes o: "+spikes+"\tspikes1: "+spikes1+"\tspikes2: "+spikes2+"\tspikes3: "+spikes3);
 			
-			point(scaleX*d+30, -(scaleY*spikes) + 200);
+			stroke(35, 35, 35);
+			point(scaleX*k+xStart, -(scaleY*spikes) + yStart);
+			// point(scaleX*d+xStart, -(scaleY*sumSpikes) + yStart);
+			stroke(255, 50, 50);
+			point(scaleX*k+xStart, -(scaleY*spikes1) + yStart);
 			
 			}	
 		}
@@ -152,32 +194,38 @@ public class FindReactions extends PApplet {
 	}
 
 
-	private void drawAxis(int xStart, int xEnd, int yStart, int yEnd) {
+	private void drawAxis(float xStart, float xEnd, float yStart, float yEnd) {
 		line(xStart, yStart, xStart, yEnd);
 		line(xStart, yStart, xEnd, yStart);
+		System.out.println("Axis drawn");
 	}
 
-	private void drawScale(int x0, int xEnd, int xBench, int xBenchValue, int y0, int yEnd, int yBench, int yBenchValue) {
+	private void drawScale(float x0, float xEnd, float xBench, float xBenchValue, float y0, float yEnd, float yBench, float yBenchValue) {
 		// draw x-scale
 		fill(50);
-		int x = xBench;
-		int i = xBenchValue;
+		float x = xBench;
+		float i = xBenchValue;
+
+		System.out.println("draw X");
+		System.out.println(x+" "+xEnd+" "+xBench);
 		while (x < xEnd) {
 			line(x, y0-2, x, y0+2);
-			text(i, x-10, y0+15);
+			text((int) i, (int) x-10, (int) y0+15);
 			i += xBenchValue;
 			x += (xBench-x0);
 		}
+		
 
 		// draw y-scale
-		int y = yBench;
+		float y = yBench;
 		i = yBenchValue;
 		while (y > yEnd) {
 			line(x0-2, y, x0+2, y);
-			text(i, x0-25, y+5);
+			text((int) i, (int) x0-25, (int) y+5);
 			i += yBenchValue;
 			y += (yBench-y0);
 		}
+		System.out.println("drawn Y");
 	}
 
 	public void keyPressed() {
