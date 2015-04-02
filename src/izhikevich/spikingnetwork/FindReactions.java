@@ -26,14 +26,14 @@ public class FindReactions extends PApplet {
 	int simLength = 500;
 
 	// scale fa8ctor
-	float scaleX = (float) 20;
+	float scaleX = (float) 4;
 	float scaleY = (float) 10;
 
 	// start and endpoint of graph
 	float xStart =40; float xEnd = 850; float yStart = 800; float yEnd = 30;
 	
 	// benchmark values for scale graph
-	float xBenchValue = 1; float yBenchValue = 10;
+	float xBenchValue = 50; float yBenchValue = 10;
 		
 	private static final long serialVersionUID = 7416187811109690854L;
 
@@ -81,31 +81,53 @@ public class FindReactions extends PApplet {
 		n3.timeStep = timeStep;
 		o1.timeStep = timeStep;
 
-		// plot behaviour of input neuron
-		
-		/*
-		float[][] plt1 = network.plotV(1, 1000);
-		float[][] pltData = Collection.shift_and_scale(plt1, 40, 400, 2.0, 1.0);
-		for (int i=0; i<plt1.length-1; i++) {
-			line(pltData[i][0], pltData[i][1], pltData[i+1][0], pltData[i+1][1]);
-		}
-		*/
-		
-
-
 		// Plot nr of spikes against sum inputweights
 		// plotSpikesWeights(simLength, (float) 0.1, (float) 2., xStart, yStart);
 		
 		// plot nr of spikes against input frequence
-		// plotSpikesInputFreq(simLength, scaleX, scaleY, xStart, yStart);
+		plotSpikesInputFreq();
 		
-		plotDependencyD();
+		// plot dependency of spike frequency on input weight
+		// plotDependencyD();
 
-		// save("../graphs/reactionsRS3RSi01.jpg");
 	}
 
 	public void draw() {
 
+	}
+	
+	public void plotSpikesInputFreq() {
+
+		weights[0] = 100; weights[1] = 100; weights[2] = 100;
+		o1.setWeights(weights);
+		
+		textSize(24);
+		text("Input", 450, 850);
+		text("Output", 20, 25);
+		
+
+		save("../graphs/Input3nOutput.jpg");
+		
+		strokeWeight(5);
+		
+		for (float k = (float) 0.1; k<=40; k+=0.1) {
+			n1.setParameters(a, b, c, k);
+			n2.setParameters(a, b, c, k);
+			n3.setParameters(a, b, c, k);
+			
+			int spikes = network.getNrOfSpikes(3, simLength);
+			int spikes1 = network.getNrOfSpikes(0, simLength);
+			int spikes2 = network.getNrOfSpikes(0, simLength);
+			int spikes3 = network.getNrOfSpikes(0, simLength);
+			int sumSpikes = spikes1 + spikes2 + spikes3;
+			
+			// System.out.println("d: "+d+"\tspikes o: "+spikes+"\tspikes1: "+spikes1+"\tspikes2: "+spikes2+"\tspikes3: "+spikes3);
+			
+			stroke(35, 35, 35);
+			point(scaleX*sumSpikes+xStart, -(scaleY*spikes) + yStart);
+			
+			}	
+		
 	}
 	
 	private void plotDependencyD() {
