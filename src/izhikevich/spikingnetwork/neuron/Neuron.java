@@ -154,6 +154,9 @@ public class Neuron {
 		double neighbourActivation = computeNeighbourActivation();
 		double inputActivation = this.I + thalamicInput + neighbourActivation;
 		computeNext(inputActivation);
+		
+		// set I back to 0
+		this.setI(0.0);
 
 		if (isTrainingMode()) updateWeights();        // update weights
 	}
