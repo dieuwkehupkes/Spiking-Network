@@ -10,6 +10,7 @@ import izhikevich.spikingnetwork.neuron.Neuron;
 import izhikevich.spikingnetwork.probabilityfunction.*;
 import izhikevich.spikingnetwork.training.*;
 import izhikevich.spikingnetwork.architecture.*;
+import javax.swing.*;
 
 public class Visualise extends PApplet {
 	/**
@@ -20,14 +21,12 @@ public class Visualise extends PApplet {
 	private static final long serialVersionUID = 7416187811109690854L;
 
 	// Parameters for visual network
-	int Nexhib = 800;               // number of random exhibitory neurons
-	int Ninhib = 400;               // number of random inhibitory neurons
-	int Nn = Nexhib + Ninhib;       // total number of neurons
-	int Ncol=40;                    // number of columns
-	int Nw=30;                      // neuron width
-	int maxNumNeighbours=10;        // maximum nr of neigbours for neuron
-	double minWeight = -5.0;           // minimal weight between neurons
-	double maxWeight = 15.0;           // maximum weight between neurons
+	int Nexhib, Ninhib, Nn;         // variables to store number of neurons
+	int Ncol;                    // number of columns
+	int Nw;                      // neuron width
+	int maxNumNeighbours;        // maximum nr of neigbours for neuron
+	double minWeight;           // minimal weight between neurons
+	double maxWeight;           // maximum weight between neurons
 	DistanceMetric distMetric = new ManhattanDistance();        // distance metric used
 	ProbabilityFunction probFunction = new Exponential(0.95);   // funct to determine prob of connecting
 	Training trainingFunction = new HeuristicalHebbian();   // training function for learning
@@ -38,8 +37,11 @@ public class Visualise extends PApplet {
 	int simulationSpeed = 50;
 
 	NeuralNetwork network;
-
+	
 	public void setup() {
+		
+		getUserInput();
+		
 		// determine size based on Nn, Ncol and Nw
 		int width = Nw*Ncol + 5;
 		int height = (int) (Nw*Nn/Ncol) + 5;
@@ -74,6 +76,61 @@ public class Visualise extends PApplet {
 		network.update(I);
 		display(network);
 
+	}
+	
+	private void getUserInput() {
+		JTextField neuronsEx = new JTextField("800");
+		JTextField neuronsIn = new JTextField("400");
+		JTextField columnNumber = new JTextField("40");
+		JTextField neuronWidth = new JTextField("30");
+		JTextField maxNn = new JTextField("10");
+		JTextField minConnectionWeight = new JTextField("-5.0");
+		JTextField maxConnectionWeight = new JTextField("15.0");
+		
+		Object[] message = {
+			"Number of Excitatory Neurons", neuronsEx,
+			"Number of Inhibitory Neurons", neuronsIn,
+			"Number of colums", columnNumber,
+			"Neuron Width", neuronWidth,
+			"Maximum Number of Neighbours", maxNn,
+			"Minimum connection weight", minConnectionWeight,
+			"Maximum connection weight", maxConnectionWeight,
+			""
+		};
+		
+		int out = JOptionPane.showConfirmDialog(null, message, "Enter", JOptionPane.OK_CANCEL_OPTION);
+		
+		if (out == JOptionPane.OK_OPTION) {
+			try {
+				Nexhib = Integer.parseInt(neuronsEx.getText());
+				Ninhib = Integer.parseInt(neuronsIn.getText());
+				Nw = Integer.parseInt(neuronWidth.getText());
+				Nn = Nexhib + Ninhib;
+				Ncol = Integer.parseInt(columnNumber.getText());
+				maxNumNeighbours = Integer.parseInt(maxNn.getText());
+				maxWeight = Double.parseDouble(minConnectionWeight.getText());
+				minWeight = Double.parseDouble(maxConnectionWeight.getText());
+			} catch (java.lang.NumberFormatException e1) {
+				JOptionPane.showMessageDialog(null, "Please provide a value for all variables");
+				getUserInput();
+			} catch (java.lang.NullPointerException e2) {
+				JOptionPane.showMessageDialog(null, "Please provide a value for all variables");
+				getUserInput();
+			}
+		}
+		
+		else if (out == JOptionPane.CANCEL_OPTION) {
+			System.out.println();
+			System.exit(out);
+		}
+		
+		checkUserInput();
+		
+	}
+	
+	private void checkUserInput() {
+		// check if number of columns is sensible?
+		// check if maxweight is larger than minweight
 	}
 
 	public void mousePressed() {
@@ -138,4 +195,5 @@ public class Visualise extends PApplet {
 		rect(x+2, y+2, Nw-6, Nw-6);
 	    }
 	}
+	
 }
