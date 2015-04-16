@@ -193,6 +193,8 @@ public class NeuralNetwork {
 		 * a certain interval
 		 */
 		
+		this.reset();
+		
 		int nrOfSpikes = 0;
 		
 		for (int i=0; i<nr_of_steps; i++) {
