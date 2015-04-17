@@ -15,7 +15,7 @@ public class Neuron {
 	private boolean trainingMode = false;
 	public double lastTimeFired;    // last round the neuron fired
 	public double t=0;            // cur round
-	public double timeStep = 0.1;
+	final public double timeStep = 0.1;
 	private double spikeDuration = 1;
 
 	public NeuralNetwork network;    // the network the neuron is part of
@@ -103,13 +103,6 @@ public class Neuron {
 		}
 		return time_u;
 
-	}
-
-
-	void setTimeStep(double timeStep) {
-		// Set the timestep for updating
-
-		this.timeStep = timeStep;
 	}
 
 	private void computeNext(double I) {
