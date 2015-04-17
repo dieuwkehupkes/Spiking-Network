@@ -12,104 +12,103 @@ public class PlotNeuron extends PApplet {
 	private static final long serialVersionUID = -8259725764770574359L;
 
 	// parameters for neuron to be plotted
-	float I = 100;
-	double a = 0.1;
+	float I = 10;
+	double a = 0.01;
 	double b = 0.2;
 	double c = -65;
-	double d = 2;
+	double d = 1;
 	
-	int simLength = 100;
-
 	// create neuron, set time = 0
 	Neuron n = new Neuron(a, b, c, d);
 
-	int shiftX = 10;
-	int shiftY = 90;
-	double scaleX = 2.0;
+	// shift for neuron behaviour
+	float shiftX = 20;
+	float shiftY = 90;
+	double scaleX = 1.5;
 	double scaleY = 1.0;
+	int simLength = 800;
 	
-	float[][] plotData = new float[simLength][2];
-	float[][] uvData = new float[simLength][2];
+	// create arrays to store data, assumes timestep taken is 0.1
+	float[][] plt = new float[simLength][2];
+	float[][] data = new float[simLength][2];
 	int curIndex = 0;	// index to fill plotdata
 	int prevIndex = -1; //
 	float curTime = (float) 0.0;
+	float curShift = (float) (-0.1*simLength);
+	int from, to;
 	
-	int rgbRed, rgbGreen, rgbBlue;
-	float r, g, bl;
-	float colorStep = 255/simLength;
-
+	boolean keyP = false;
+	
 	
 	public void setup() {
-		size(450, 400);
+		size(200, 200);
 		background(255);
 		fill(0);
-		frameRate(50);
+		frameRate(100);
 
 		n.t = 0;
-
-		plotData[0][0] = (float) 0.0;
-		plotData[0][1] = (float) n.u;
+		n.v = 35;
 		
-		uvData[0][0] = (float) n.u;
-		uvData[0][1] = (float) n.v;
+		plt[0][0] = 0;
+		plt[0][1] = (float) n.v;
 		
-		rgbRed = 100;
-		rgbGreen = 0;
-		rgbBlue = 255;
+		strokeWeight(1);
+		stroke(0);
 		
-		r = (float) rgbRed;
-		g = (float) rgbGreen;
-		bl = (float) rgbBlue;
-		
-		n.timeStep = 1;
-
-		}
+	}
 
 	public void draw() {
 		
-		if (curIndex == (simLength - 2)) {
-			noLoop();
-			// save("../graphs/neuron_statespace_trajectory1.png");
+		if (! keyP) {
+			return;
 		}
 		
-		r += colorStep;
-		g += colorStep;
-		bl -= colorStep;
-		
-		curIndex = (curIndex+1) % 1000;
-		prevIndex = (prevIndex+1) % 1000;
-		curTime += n.timeStep;
-
-		// update neuron
+		prevIndex = curIndex;				// store previous index
+		curTime += n.timeStep;				// increment time
+		curShift += n.timeStep;				// increment shift
+		curIndex = (curIndex +1) % simLength;	// increment index
+	
+		// generate new datapoint
 		n.update(I);
-		
-		plotData[curIndex][0] = curTime;
-		plotData[curIndex][1] = (float) n.v;
-		
-		uvData[curIndex][0] = (float) n.u;
-		uvData[curIndex][1] = (float) n.v;
+		plt[curIndex][0] = curTime;
+		plt[curIndex][1] = (float) n.v;
 
-		float[][] plt = Collection.shift_and_scale(plotData, shiftX, shiftY, scaleX, scaleY);
-		// float[][] plt = Collection.shift_and_scale(plotData, shiftX, shiftY+250, scaleX, 0.8);
-		// scale output and draw plot
-		strokeWeight(1);
-		stroke(0);
-		line(plt[prevIndex][0], plt[prevIndex][1], plt[curIndex][0], plt[curIndex][1]);
-		
-		float[][] plt2 = Collection.shift_and_scale(uvData, shiftX+20, shiftY+200, 5, scaleY);
-		// float[][] plt2 = Collection.shift_and_scale(uvData, shiftX+15, shiftY+2800, scaleX, 0.3);
 
-		strokeWeight(2);
-		rgbRed = (int) r;
-		rgbBlue = (int) bl;
-		rgbGreen = (int) g;
-		stroke(rgbGreen, 0, rgbBlue);
-		line(plt2[prevIndex][0], plt2[prevIndex][1], plt2[curIndex][0], plt2[curIndex][1]);
+		if (curShift <= 0) {	// if curShift <= 0, plot next datapoint and return
+			data = Collection.shift_and_scale(plt, shiftX, shiftY, scaleX, scaleY);
+			line(data[prevIndex][0], data[prevIndex][1], data[curIndex][0], data[curIndex][1]);
+			return;
+		}
+
+		// clear background
+		background(255);
+		
+		// update x-shift factor
+		shiftX -= 0.1;
+		
+		// rescale data and plot
+		float[][] data = Collection.shift_and_scale(plt,  shiftX, shiftY, scaleX, scaleY);
+		
+		for (int i = 1; i<simLength; i++) {
+			from = (i+curIndex) % simLength;
+			to = (from +1) % simLength;
+			line(data[from][0], data[from][1], data[to][0], data[to][1]);
+		}
+
 		
 	}
 
 	public void keyPressed() {
-		exit();
+		if (key == ' ') {
+			keyP = true;
+		}
+		if (key == 'q') {
+			exit();
+		}
 	}
-
+	
+	public void keyReleased() {
+		//keyP = false;
+	}
+	
 }
