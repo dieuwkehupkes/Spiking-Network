@@ -1,5 +1,8 @@
 package izhikevich.spikingnetwork;
 
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 import izhikevich.spikingnetwork.neuron.Neuron;
 import processing.core.*;
 import izhikevich.spikingnetwork.Collection;
@@ -12,15 +15,10 @@ public class PlotNeuron extends PApplet {
 	private static final long serialVersionUID = -8259725764770574359L;
 
 	// parameters for neuron to be plotted
-	float I = 10;
-	double a = 0.01;
-	double b = 0.2;
-	double c = -65;
-	double d = 1;
+	float I;
+	double a, b, c, d;
+	Neuron n;
 	
-	// create neuron, set time = 0
-	Neuron n = new Neuron(a, b, c, d);
-
 	// shift for neuron behaviour
 	float shiftX = 20;
 	float shiftY = 90;
@@ -37,10 +35,16 @@ public class PlotNeuron extends PApplet {
 	float curShift = (float) (-0.1*simLength);
 	int from, to;
 	
-	boolean keyP = false;
+	boolean keyP = true;
 	
 	
 	public void setup() {
+		
+		getUserInput();
+
+		// create neuron, set time = 0
+		n = new Neuron(a, b, c, d);
+		
 		size(200, 200);
 		background(255);
 		fill(0);
@@ -97,14 +101,41 @@ public class PlotNeuron extends PApplet {
 
 		
 	}
-
+	
+	private void getUserInput() {
+		JTextField aVal = new JTextField("0.01");
+		JTextField bVal = new JTextField("0.2");
+		JTextField cVal = new JTextField("-65");
+		JTextField dVal = new JTextField("2");
+		JTextField IVal = new JTextField("10");
+		
+		Object[] message = {
+				"a", aVal,
+				"b", bVal,
+				"c", cVal,
+				"d", dVal,
+				"I", IVal,
+				""
+		};
+		
+		int out = JOptionPane.showConfirmDialog(null, message, "Specify Parameters", JOptionPane.OK_CANCEL_OPTION);
+		
+		if (out == JOptionPane.OK_OPTION) {
+			a = Double.parseDouble(aVal.getText());
+			b = Double.parseDouble(bVal.getText());
+			c = Double.parseDouble(cVal.getText());
+			d = Double.parseDouble(dVal.getText());
+			I = Float.parseFloat(IVal.getText());
+		}
+		
+		else if (out == JOptionPane.CANCEL_OPTION) {
+			System.exit(0);
+		}
+	}
+		
 	public void keyPressed() {
-		if (key == ' ') {
-			keyP = true;
-		}
-		if (key == 'q') {
-			exit();
-		}
+		if (key == ' ') keyP = keyP ? false : true;
+		if (key == 'q' || key == 'x') exit();
 	}
 	
 	public void keyReleased() {
