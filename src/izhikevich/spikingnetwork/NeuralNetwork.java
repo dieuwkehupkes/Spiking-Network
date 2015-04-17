@@ -33,7 +33,7 @@ public class NeuralNetwork {
 		 */
 	}
 
-	NeuralNetwork(Neuron[] neurons, int Ncol, int Nw) {
+	public NeuralNetwork(Neuron[] neurons, int Ncol, int Nw) {
 		/**
 		 * Construct network with neurons
 		 */
