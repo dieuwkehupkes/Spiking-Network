@@ -21,7 +21,7 @@ public class MakeGraph extends PApplet {
 		textFont(f, 16);
 		fill(0);
 		
-		double timeStep = 0.01;
+		double timeStep = 0.1;
 		int steps = (int) (200/timeStep);
 		int steps05 = (int) (0.5*steps);
 		int steps005 = (int) (0.05*steps);
@@ -36,6 +36,7 @@ public class MakeGraph extends PApplet {
 		Neuron n6 = new Neuron(0.1, 0.23, -65, -1);     // resonator
 		Neuron n7 = new Neuron(0.02, 0.25, -65, 2);   // low-threshold spiking
 		
+		/*
 		n1.timeStep = timeStep;
 		n2.timeStep = timeStep;
 		n3.timeStep = timeStep;
@@ -43,6 +44,7 @@ public class MakeGraph extends PApplet {
 		n5.timeStep = timeStep;
 		n6.timeStep = timeStep;
 		n7.timeStep = timeStep;
+		*/
 
 		// create data arrays with their behaviour
 		float[][] plotdata1 = n1.plot_v(10, steps);

@@ -51,9 +51,6 @@ public class FindReactions extends PApplet {
 		drawScale(xStart, xEnd, xBench, xBenchValue, yStart, yEnd, yBench, yBenchValue);
 		System.out.println("scale drawn");
 		
-		// set timestep
-		double timeStep = 0.1;
-
 		// create input neurons
 		n1 = new Neuron(a, b, c, d);	// regular spiking neuron
 		n2 = new Neuron(a, b, c, d);	// regular spiking neuron
@@ -74,12 +71,6 @@ public class FindReactions extends PApplet {
 		n1.setI(100.0);
 		n2.setI(100.0);
 		n3.setI(100.0);
-
-		// set timestep
-		n1.timeStep = timeStep;
-		n2.timeStep = timeStep;
-		n3.timeStep = timeStep;
-		o1.timeStep = timeStep;
 
 		// Plot nr of spikes against sum inputweights
 		// plotSpikesWeights(simLength, (float) 0.1, (float) 2., xStart, yStart);
