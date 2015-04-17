@@ -50,6 +50,11 @@ public class Neuron {
 		 * in a certain interval
 		 */
 		this.reset();
+		
+		for (int i=0; i<500; i++) {
+			this.update(I);
+		}
+		
 		int nrOfSpikes = 0;
 		
 		for (int i=0; i<nrOfSteps; i++) {
@@ -63,10 +68,6 @@ public class Neuron {
 		return nrOfSpikes;
 	}
 	
-	public int getNrOfSpikes(int nrOfSteps) {
-		return getNrOfSpikes(0, nrOfSteps);
-	}
-
 	public float[][] plot_v(double I, int nr_of_steps) {
 		// Show behaviour of neuron as a result of a constant input current
 
