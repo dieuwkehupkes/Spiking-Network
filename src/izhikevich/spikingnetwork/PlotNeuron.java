@@ -13,7 +13,16 @@ public class PlotNeuron extends PApplet {
 	 */
 
 	private static final long serialVersionUID = -8259725764770574359L;
-
+	
+	// button for creating new neuron
+	float buttonPosX = 10;
+	float buttonPosY = 8;
+	float buttonWidth = 200;
+	float buttonHeight = 100;
+	int textSize = 30;
+	String textString = "Press \"n\" to restart\nPress SPACE to pause";
+	boolean buttonOver = false;
+	
 	// parameters for neuron to be plotted
 	float I;
 	double a, b, c, d;
@@ -21,10 +30,10 @@ public class PlotNeuron extends PApplet {
 	
 	// shift for neuron behaviour
 	float shiftX = 20;
-	float shiftY = 90;
-	double scaleX = 1.5;
+	float shiftY = 100;
+	double scaleX = 1.3;
 	double scaleY = 1.0;
-	int simLength = 800;
+	int simLength = 1000;
 	
 	// create arrays to store data, assumes timestep taken is 0.1
 	float[][] plt = new float[simLength][2];
@@ -39,16 +48,15 @@ public class PlotNeuron extends PApplet {
 	
 	
 	public void setup() {
-		
-		getUserInput();
 
-		// create neuron, set time = 0
-		n = new Neuron(a, b, c, d);
-		
-		size(200, 200);
+		size(250, 200);
 		background(255);
-		fill(0);
+		fill(50);
 		frameRate(100);
+		//textSize(textSize);
+		text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
+
+		getUserInput();
 
 		n.t = 0;
 		n.v = 35;
@@ -86,6 +94,7 @@ public class PlotNeuron extends PApplet {
 
 		// clear background
 		background(255);
+		text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
 		
 		// update x-shift factor
 		shiftX -= 0.1;
@@ -103,6 +112,7 @@ public class PlotNeuron extends PApplet {
 	}
 	
 	private void getUserInput() {
+
 		JTextField aVal = new JTextField("0.01");
 		JTextField bVal = new JTextField("0.2");
 		JTextField cVal = new JTextField("-65");
@@ -126,16 +136,36 @@ public class PlotNeuron extends PApplet {
 			c = Double.parseDouble(cVal.getText());
 			d = Double.parseDouble(dVal.getText());
 			I = Float.parseFloat(IVal.getText());
+
+			// create neuron, set time = 0
+			n = new Neuron(a, b, c, d);
+			
+			reset();
+		
 		}
 		
 		else if (out == JOptionPane.CANCEL_OPTION) {
 			System.exit(0);
 		}
 	}
+	
+	public void reset() {
+		// reset values to start plotting for new neuron
+		shiftX = 20;
+
+		plt = new float[simLength][2];
+		data = new float[simLength][2];
+		curIndex = 0;	// index to fill plotdata
+		curTime = (float) 0.0;
+		curShift = (float) (-0.1*simLength);
+		background(255);
+		text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
+	}
 		
 	public void keyPressed() {
 		if (key == ' ') keyP = keyP ? false : true;
 		if (key == 'q' || key == 'x') exit();
+		if (key == 'n' ) getUserInput();
 	}
 	
 	public void keyReleased() {
