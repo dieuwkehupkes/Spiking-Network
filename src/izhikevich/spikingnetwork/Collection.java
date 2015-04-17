@@ -6,7 +6,7 @@ public class Collection {
 	 * package
 	 */
 
-	public static float[][] shift_and_scale(float[][] i, int shiftx, int shifty, double scalex, double scaley) {
+	public static float[][] shift_and_scale(float[][] i, float shiftx, float shifty, double scalex, double scaley) {
 		// function for shifting and scaling values to plot them
 		float[][] output = new float[i.length][i[0].length];
 
