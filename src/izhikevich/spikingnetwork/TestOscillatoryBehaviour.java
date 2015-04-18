@@ -24,14 +24,14 @@ public class TestOscillatoryBehaviour extends PApplet {
 	int iN = - (35-Nw);
 	
 	// info for plotting v of neurons
-	int simLength = 1500;
+	int simLength = 1000;
 	double scaleX, scaleY;		// scale in x and y direction of plotdata
 	float[][][] plt;			// store plot data
 	float curTime;				// current Time
 	float[] baseShift, shiftX, shiftY;	// shift for plotting data
 	float[] curShift;
-	float[][] pltDataShifted = new float[simLength][2];
-	int[] curIndex;
+	float[][] data = new float[simLength][2];	// array to store shifted plot data
+	int[] curIndex, prevIndex;
 	int from; int to;
 	boolean plot = false;
 
@@ -83,13 +83,6 @@ public class TestOscillatoryBehaviour extends PApplet {
 			for (int iNeuron=0; iNeuron<8; iNeuron++) {
 				plotNeuron(iNeuron);
 			}
-			
-			/*
-			curIndex = (curIndex+1) % simLength;
-			for (int iNeuron=0; iNeuron<8; iNeuron++) {
-				// plotNeuron(iNeuron);
-			}
-			*/
 		}
 		
 		curTime += 0.1;
@@ -97,38 +90,40 @@ public class TestOscillatoryBehaviour extends PApplet {
 	}
 	
 	
-	private void plotNeuron(int neuronIndex) {
+	private void plotNeuron(int nI) {
 		
 		fill(255);
-		rect(shiftX[neuronIndex]-100, shiftY[neuronIndex]-140, 140, 140);
-		/*
-		// update indices
-		prevIndex = curIndex[neuronIndex];
-		curTime += 0.1;
-		curShift[neuronIndex] +=0.1;
-
-		plt[neuronIndex][curIndex[neuronIndex]][0] = curTime;
-		plt[neuronIndex][curIndex[neuronIndex]][1] = (float) network.getNeuron(neuronIndex).v;
+		rect(baseShift[nI]-80, shiftY[nI]-140, 140, 140);
 		
-		if (curShift[neuronIndex] <= 0) {	// if curShift <= 0, plot next datapoint and return
-			data = Collection.shift_and_scale(plt[neuronIndex], baseShift[neuronIndex], shiftY[neuronIndex], scaleX, scaleY);
-			line(data[prevIndex][0], data[prevIndex][1], data[curIndex][0], data[curIndex][1]);
+		// update indices and time
+		curTime += 0.1;
+		curShift[nI] += 0.1;
+		prevIndex[nI] = curIndex[nI];
+		curIndex[nI] = (curIndex[nI]+1) % simLength;
+
+		plt[nI][curIndex[nI]][0] = curTime;
+		plt[nI][curIndex[nI]][1] = (float) network.getNeuron(nI).v;
+
+		if (curShift[nI] <= baseShift[nI]) {	// if curShift <= 0, plot next datapoint and return
+			data = Collection.shift_and_scale(plt[nI], baseShift[nI], shiftY[nI], scaleX, scaleY);
+			line(data[prevIndex[nI]][0], data[prevIndex[nI]][1], data[curIndex[nI]][0], data[curIndex[nI]][1]);
 			return;
 		}
 
 		
+		// plot is in the fase where data needs to be shifted
+			
 		// update x-shift factor
-		shiftX[neuronIndex] -= 0.1;
+		shiftX[nI] -= 0.1;
 		
 		// rescale data and plot
-		float[][] data = Collection.shift_and_scale(plt[neuronIndex],  shiftX[neuronIndex], shiftY[neuronIndex], scaleX, scaleY);
+		data = Collection.shift_and_scale(plt[nI],  shiftX[nI], shiftY[nI], scaleX, scaleY);
 		
 		for (int i = 1; i<simLength; i++) {
-			from = (i+curIndex) % simLength;
+			from = (i+curIndex[nI]) % simLength;
 			to = (from +1) % simLength;
 			line(data[from][0], data[from][1], data[to][0], data[to][1]);
 		}
-		*/
 		
 	}
 	
@@ -205,17 +200,25 @@ public class TestOscillatoryBehaviour extends PApplet {
 		size(7*Nw, 7*Nw+iN);
 		
 		// initialising of all the values used for plotting
-		scaleX = 1.2; scaleY = 1.0;		// initialise scaling data
-		resetPlotData();	// empty the data matrix for the plot and reset curTime
+		scaleX = 1.0; scaleY = 1.0;		// initialise scaling data
 
 		// fill baseShift
 		baseShift = new float[8];
-		baseShift[0] = 30+Nw_p; for (int i=1; i<8; i++) baseShift[i] = 5*Nw_p+30;
+		baseShift[0] = 10+Nw_p; for (int i=1; i<8; i++) baseShift[i] = 5*Nw_p+30;
 		// initialise shiftX array
 		shiftX = baseShift;
 		// set shiftY value
 		shiftY = new float[8];
-		shiftY[0] = 50+4*Nw_p; for (int i=1; i<8; i++) shiftY[i] = 50+ i *Nw_p;
+		shiftY[0] = 20+4*Nw_p; for (int i=1; i<8; i++) shiftY[i] = 20+ i *Nw_p;
+		
+		// create curShift
+		curShift = new float[8];
+
+		// create curIndex, prevIndex
+		curIndex = new int[8];
+		for (int i=0; i<8; i++) curIndex[i] = 0;
+		prevIndex = new int[8];
+		for (int i=0; i<8; i++) curIndex[i] = -1;
 
 	}
 
@@ -242,16 +245,12 @@ public class TestOscillatoryBehaviour extends PApplet {
 		// fill first element of array with current values
 		curTime = 0;
 		plt = new float[8][simLength][2];
-		/*
-		plt = new float[8][simLength][2];
 		for (int i=0; i<8; i++) {
-		curIndex[i] = 0;
-			// System.out.println(plt[i]);
-			//plt[i][0][0] = curTime;
-			plt[i][curIndex][1] = (float) network.getNeuron(i).v;
-			// curShift[i] = (float) (baseShift[i] - (0.1*simLength));
+			curIndex[i] = 0;	// reset current index
+			plt[i][0][0] = curTime;		// reset plot data
+			plt[i][0][1] = (float) network.getNeuron(i).v;
+			curShift[i] = (float) (baseShift[i] - (0.1*simLength));
 		}
-	*/
 	}
 		
 }
