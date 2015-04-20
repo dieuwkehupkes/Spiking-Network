@@ -17,6 +17,7 @@ public class Neuron {
 	public double t=0;            // cur round
 	final public double timeStep = 0.1;
 	private double spikeDuration = 1;
+	private int nSpikes=0;		// number of spikes since t=0;
 
 	public NeuralNetwork network;    // the network the neuron is part of
 	private int neighbours[];     // indices pointing to the neighbours of the neuron
@@ -55,24 +56,23 @@ public class Neuron {
 			this.update(I);
 		}
 		
-		int nrOfSpikes = 0;
+		// reset nr of spikes and time
+		this.nSpikes = 0;
+		this.t = 0;
 		
 		for (int i=0; i<nrOfSteps; i++) {
 			this.update(I);
-			
-			if (this.fired) {
-				nrOfSpikes+=1;
 			}
-		}
 		
-		return nrOfSpikes;
+		return this.nSpikes;
 	}
 	
 	public float[][] plot_v(double I, int nr_of_steps) {
 		// Show behaviour of neuron as a result of a constant input current
 
 		float[][] time_potential = new float[nr_of_steps][2];     // declare array to store output
-		int nr_of_spikes = 0;
+		this.nSpikes = 0;		// reset nr of spikes
+		this.t = 0;				// reset time
 
 		double input = I + this.I;
 
@@ -82,10 +82,9 @@ public class Neuron {
 			time_potential[i][0] = (float) cur_time;
 			time_potential[i][1] = (float) v;
 			computeNext(input);
-			if (this.fired) nr_of_spikes++; 
 		}
 
-		System.out.print(nr_of_spikes++);
+		System.out.print(this.nSpikes);
 
 		return time_potential;
 	}
@@ -116,8 +115,9 @@ public class Neuron {
 		if (this.v>30) {
 			this.v=this.c;
 			this.u=this.u+this.d;
-			this.fired = true;
-			this.firing = true;
+			this.fired = true;		// set neuron to fired
+			this.nSpikes++;			// increment nr of spikes
+			this.firing = true;		// set neuron to firing
 			this.lastTimeFired = this.t;
 			return;
 		}
@@ -129,7 +129,6 @@ public class Neuron {
         	this.firing = false;
         }
 
-        // this.firing = false;
         this.fired = false;
 	}
 
@@ -217,6 +216,23 @@ public class Neuron {
 	    }
 		 */
 	}
+	
+	public double spikeAverage() {
+		/**
+		 * Return the average number of spikes since the
+		 * last reset
+		 */
+		double spikeAverage = this.nSpikes/this.t;
+		return spikeAverage;
+	}
+	
+	public double averageSpikePeriod() {
+		/**
+		 * Return the average spike period
+		 */
+		double averageSpikePeriod =  this.t/this.nSpikes;
+		return averageSpikePeriod;
+	}
 
 	public void validateParameters(double aMin, double aMax, double bMin, double bMax, double cMin, double cMax, double dMin, double dMax) {
 
@@ -236,8 +252,10 @@ public class Neuron {
 
 	public void reset() {
 		// reset neuron and time
-		v = c;
-		u = b*c;
+		this.v = this.c;
+		this.u = this.b*this.c;
+		this.t = 0.0;
+		this.nSpikes = 0;
 	}
 
 	public void resetI() {
