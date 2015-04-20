@@ -222,6 +222,7 @@ public class Neuron {
 		 * Return the average number of spikes since the
 		 * last reset
 		 */
+		if (this.t== 0) return 0.0;
 		double spikeAverage = this.nSpikes/this.t;
 		return spikeAverage;
 	}
@@ -230,12 +231,8 @@ public class Neuron {
 		/**
 		 * Return the average spike period
 		 */
-		double averageSpikePeriod;
-		if (this.nSpikes == 0) {
-			averageSpikePeriod = 0;
-		} else {
-			averageSpikePeriod =  this.t/this.nSpikes;
-		}
+		if (this.nSpikes == 0) return 0;
+		double averageSpikePeriod =  this.t/this.nSpikes;
 		return averageSpikePeriod;
 	}
 
