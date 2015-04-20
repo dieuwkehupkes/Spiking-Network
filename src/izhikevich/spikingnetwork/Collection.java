@@ -14,13 +14,12 @@ public class Collection {
 		for (float[] tuple: i) {
 
 			// apply scaling and shifting of time variable
-			output[counter][0] = tuple[0] + shiftx;
-			output[counter][0] *= scalex;
+			output[counter][0] = (float) (tuple[0]*scalex);
+			output[counter][0] += shiftx;
 
 			// apply scaling and shifting of potential variable
-			output[counter][1] = -1*tuple[1];        // flip sign to get direction right
+			output[counter][1] = (float) (-tuple[1]*scaley);	// scale and flip sign
 			output[counter][1] += shifty;
-			output[counter][1] *= scaley;
 
 			// increase counter
 			counter++;
