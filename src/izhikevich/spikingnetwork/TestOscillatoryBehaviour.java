@@ -13,6 +13,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 	NeuralNetwork network;
 	Neuron[] n;
 	double a = 0.01; double b = 0.2; int c = -65;
+	double I = 10;		// input current for input neuron
 	int simulationSpeed = 500;
 	boolean mouseP = false;         // indicates whether mouse is pressed
 	
@@ -34,15 +35,20 @@ public class TestOscillatoryBehaviour extends PApplet {
 	float[][] data = new float[simLength][2];	// array to store shifted plot data
 	int[] curIndex, prevIndex;
 	int from; int to;
-	double neuronAv;
+	int neuronAv;
 
 	boolean plot = false;
 	boolean pause = false;
 	boolean noShift = true;	// set to true to make computation lighter
+	int mouseOver;
 	
 	public void setup() {
 		
+		size(10*Nw, 10*Nw);								// start with setting window size
+		if (frame != null) frame.setResizable(true);		// allow reseizing of screen
+
 		initialise();
+
 		// Create neurons (maybe put that in a function
 		Neuron n1 = new Neuron(a, b, c, 1.01);		// spike period 20
 		Neuron n2 = new Neuron(a, b, c, 1.75);		// spike period 30
@@ -73,14 +79,13 @@ public class TestOscillatoryBehaviour extends PApplet {
 	
 	public void draw() {
 		
+		mouseOver();
+		
 		if (pause) {
 			return;
 		}
 		
-		// maybe with mouse pressed we actually want to be able to do some things
-		if (mouseP) network.mousePressed(mouseX, mouseY);
-
-		network.getNeuron(7).setI(10);
+		network.getNeuron(7).setI(this.I);
 
 		/*
 		for (int i=0; i<7; i++) {
@@ -152,6 +157,27 @@ public class TestOscillatoryBehaviour extends PApplet {
 		
 	}
 	
+	private void mouseOver() {
+		/**
+		 * Check if mouse is currently on any neuron,
+		 * set this.mouseOver to neuronIndex
+		 */
+		
+		for (int i=0; i<8; i++) {
+			Neuron n = network.getNeuron(i);
+			if (mouseX <= n.getX()+NwFixed && mouseX >= n.getX() && mouseY <= n.getY()+NwFixed  && mouseY >= n.getY()) {
+				this.mouseOver = i;
+				//if (prevMouse != mouseOver) System.out.println("Mouse over "+i);
+				return;
+			}
+		}
+		
+		this.mouseOver = -1;
+		//if (prevMouse != mouseOver) System.out.println("Mouse not over anything");
+		
+		
+	}
+	
 	private void setNeuronCoordinates() {
 		
 		
@@ -169,12 +195,30 @@ public class TestOscillatoryBehaviour extends PApplet {
 		neuron.setX(this.iN);
 		neuron.setY(network.getNeuron(3).getY());
 	}
+	
+	private void changeNeuronParams(int neuronIndex) {
+		Neuron neuron = network.getNeuron(neuronIndex);
+		double[] newParams = Collection.getUserInputNeuron(neuron.a(), neuron.b(), neuron.c(), neuron.d(), this.I);
+		neuron.setParameters(newParams[0], newParams[1], newParams[2], newParams[3]);
+		this.I = newParams[4];
+	}
 
 	public void mousePressed() {
-		// when the mouse is pressed, give the neuron
-		// it is pointing at extra activation
+		
+		// use mouse to change values of neuron
 		mouseP = true;
-		network.mousePressed(mouseX, mouseY);
+		
+		if (mouseOver > -1) {
+			pause = true;
+			changeNeuronParams(mouseOver);		// change parameters neuron
+			// reset time and number of spikes
+			for (int i=0; i<8; i++) {
+				network.getNeuron(i).t = 0.0;
+				network.getNeuron(i).nSpikes = 0;
+			}
+		}
+		
+		pause = false;
 	}
 	
 	public void mouseReleased() {
@@ -186,7 +230,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 		if (key=='+'|| key=='-') {    // change simulationspeed
 			simulationSpeed = (key=='+') ? simulationSpeed+5 : simulationSpeed -5;    //change speed
 			if (simulationSpeed <=0) simulationSpeed = 1;
-			System.out.println("new frameRate"+ simulationSpeed);
+			System.out.println("new frameRate = "+ simulationSpeed);
 			frameRate(simulationSpeed);
 		}
 		// quit program by pressing x or q
@@ -229,18 +273,18 @@ public class TestOscillatoryBehaviour extends PApplet {
 	    // draw rectangle
 	    rect(x, y, this.NwFixed, this.NwFixed);
 	    fill(0);
-	    int neuronAv = (int) neuron.averageSpikePeriod();
-	    String neuronAverage = Integer.toString(neuronAv);
-	    System.out.println(neuronAverage);
-	    text(neuronAverage, x+8, y+20);
+	    textSize(15);
+	    neuronAv = (int) neuron.averageSpikePeriod();
+	    textAlign(CENTER);
+	    System.out.println(neuronAv);
+	    text(neuronAv, x+14, y+20);
 	}
-
+	
 	private void initialise() {
-		// set the size of the simulation
-		frameRate(simulationSpeed);
 
-		setSize();
-		writeInstructions();
+		frameRate(simulationSpeed);		// set the framerate
+
+		writeInstructions();			// write instructions
 		
 		// initialising of all the values used for plotting
 		scaleX = 1.2; scaleY = 0.8;		// initialise scaling data
@@ -296,12 +340,14 @@ public class TestOscillatoryBehaviour extends PApplet {
 	private void writeInstructions() {
 		
 		String instr = 	"Press SPACE to pause simulation\n" +
+						"Press x or q to ext simulation\n" +
 						"Press +\\- to change the speed of the simulation\n" +
 						"Press p to toggle v/t-plot\n" +
 						"Press s to toggle shift/redraw mode of v/t-plot\n" +
 						"(using shift-mode may slow down the simlation significantly";
 		fill(0);
-		text(instr, 5, this.height-80);
+		textAlign(LEFT);
+		text(instr, 10, this.height-80);
 	}
 
 	private void resetPlotData() {
