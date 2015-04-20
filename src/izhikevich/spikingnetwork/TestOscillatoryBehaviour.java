@@ -34,11 +34,12 @@ public class TestOscillatoryBehaviour extends PApplet {
 	float[][] data = new float[simLength][2];	// array to store shifted plot data
 	int[] curIndex, prevIndex;
 	int from; int to;
+	double neuronAv;
 
 	boolean plot = false;
 	boolean pause = false;
 	boolean noShift = true;	// set to true to make computation lighter
-
+	
 	public void setup() {
 		
 		initialise();
@@ -107,6 +108,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 		if (curShift[0] >= baseShift[0]) {
 			if (noShift) resetPlotData();
 			background(255);
+			writeInstructions();
 		}
 		
 		for (int neuronIndex = 0; neuronIndex<8; neuronIndex++) {
@@ -226,12 +228,19 @@ public class TestOscillatoryBehaviour extends PApplet {
 
 	    // draw rectangle
 	    rect(x, y, this.NwFixed, this.NwFixed);
+	    fill(0);
+	    int neuronAv = (int) neuron.averageSpikePeriod();
+	    String neuronAverage = Integer.toString(neuronAv);
+	    System.out.println(neuronAverage);
+	    text(neuronAverage, x+8, y+20);
 	}
 
 	private void initialise() {
 		// set the size of the simulation
 		frameRate(simulationSpeed);
-		size(7*Nw, 7*Nw+20);
+
+		setSize();
+		writeInstructions();
 		
 		// initialising of all the values used for plotting
 		scaleX = 1.2; scaleY = 0.8;		// initialise scaling data
@@ -266,13 +275,33 @@ public class TestOscillatoryBehaviour extends PApplet {
 			this.Nw = Nw_p;
 		} else {
 			this.Nw = Nw_np;
-			// network.getNeuron(0).setNw(Nw);
 		}
 		
 		this.iN = -(35-this.Nw);
 
 		setNeuronCoordinates();
-		size(7*Nw, 7*Nw);
+		setSize();
+		writeInstructions();
+	}
+	
+	private void setSize() {
+
+		if (Nw < 50) {
+			size(10*Nw, 10*Nw);
+		} else {
+			size(7*Nw, 7*Nw+20);
+		}
+	}
+	
+	private void writeInstructions() {
+		
+		String instr = 	"Press SPACE to pause simulation\n" +
+						"Press +\\- to change the speed of the simulation\n" +
+						"Press p to toggle v/t-plot\n" +
+						"Press s to toggle shift/redraw mode of v/t-plot\n" +
+						"(using shift-mode may slow down the simlation significantly";
+		fill(0);
+		text(instr, 5, this.height-80);
 	}
 
 	private void resetPlotData() {
