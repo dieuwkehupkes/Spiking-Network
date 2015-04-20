@@ -17,7 +17,7 @@ public class Neuron {
 	public double t=0;            // cur round
 	final public double timeStep = 0.1;
 	private double spikeDuration = 1;
-	private int nSpikes=0;		// number of spikes since t=0;
+	public int nSpikes=0;		// number of spikes since t=0;
 
 	public NeuralNetwork network;    // the network the neuron is part of
 	private int neighbours[];     // indices pointing to the neighbours of the neuron
@@ -230,7 +230,12 @@ public class Neuron {
 		/**
 		 * Return the average spike period
 		 */
-		double averageSpikePeriod =  this.t/this.nSpikes;
+		double averageSpikePeriod;
+		if (this.nSpikes == 0) {
+			averageSpikePeriod = 0;
+		} else {
+			averageSpikePeriod =  this.t/this.nSpikes;
+		}
 		return averageSpikePeriod;
 	}
 
