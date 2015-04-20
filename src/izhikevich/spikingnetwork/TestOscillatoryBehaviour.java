@@ -157,7 +157,8 @@ public class TestOscillatoryBehaviour extends PApplet {
 		for (int i=0; i<7; i++) {
 			Neuron neuron = network.getNeuron(i);
 			neuron.setX(3*this.Nw+this.iN);
-			neuron.setY(i*this.Nw+this.iN+10);
+			if (this.Nw <=50) neuron.setY(i*this.Nw+this.iN+10);
+			else neuron.setY(i*this.Nw+this.iN);
 			//System.out.println("Neuron "+i+": ("+neuron.getX()+", "+neuron.getY()+")");
 		}
 		
@@ -225,10 +226,6 @@ public class TestOscillatoryBehaviour extends PApplet {
 
 	    // draw rectangle
 	    rect(x, y, this.NwFixed, this.NwFixed);
-	    
-	    strokeWeight(10);
-	    point(x, y);
-	    strokeWeight(1);
 	}
 
 	private void initialise() {
