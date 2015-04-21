@@ -132,7 +132,7 @@ public class Neuron {
         this.fired = false;
 	}
 
-	void update() {
+	public void update() {
 		// Update with 0.0 input from outside the network
 		update(0.0);
 	}
