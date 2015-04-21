@@ -1,5 +1,7 @@
 package izhikevich.spikingnetwork;
 
+import javax.swing.JOptionPane;
+
 import izhikevich.spikingnetwork.neuron.Neuron;
 import processing.core.*;
 
@@ -9,9 +11,10 @@ public class TestOscillatoryBehaviour extends PApplet {
 	
 	private static final long serialVersionUID = 3320297483047002458L;
 
-	Neuron n1, n2, n3, n4, n5, n6, n7, inputNeuron;
+	Neuron n1, n2, n3, n4, n5, n6, n7, inputNeuron, o1, o2, o3;
 	NeuralNetwork network;
 	Neuron[] n;
+
 	double a = 0.01; double b = 0.2; int c = -65;
 	double I = 10;		// input current for input neuron
 	int simulationSpeed = 500;
@@ -20,6 +23,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 	// info for plotting neurons
 	final int Nw_np = 40;
 	final int Nw_p = 140;
+	final int nN = 11;		// number of neurons
 	
 	final int NwFixed = 30;
 	int Nw = 40;
@@ -40,6 +44,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 	boolean plot = false;
 	boolean pause = false;
 	boolean noShift = true;	// set to true to make computation lighter
+	int screenshotNr = 0;
 	int mouseOver;
 	
 	public void setup() {
@@ -59,8 +64,12 @@ public class TestOscillatoryBehaviour extends PApplet {
 		Neuron n7 = new Neuron(a, b, c, 7.54);		// spike period 80
 		
 		Neuron inputNeuron = new Neuron(a, b, c, 1.01);	// input neuron
+		
+		Neuron o1 = new Neuron(a, b, c, 1);
+		Neuron o2 = new Neuron(a, b, c, 1);
+		Neuron o3 = new Neuron(a, b, c, 1);
 
-		n = new Neuron[] {n1, n2, n3, n4, n5, n6, n7, inputNeuron};
+		n = new Neuron[] {n1, n2, n3, n4, n5, n6, n7, inputNeuron, o1, o2, o3};
 		
 		network = new NeuralNetwork(n, 1, Nw);
 		
@@ -68,11 +77,17 @@ public class TestOscillatoryBehaviour extends PApplet {
 		for (Neuron neuron : new Neuron[] {n1, n2, n3, n4, n5, n6, n7}) {
 
 			// create connection to input neuron
-
 			neuron.setConnections(new int[] {7}, new double[] {30.});
-			// set coordinates for visualisation
-		}
 
+		}
+		
+		// create connection to output neurons
+		int[] allNeurons = new int[] {0, 1, 2, 3, 4, 5, 5};
+		o1.setConnections(allNeurons, new double[] {20.0, 20.0, 5.0, 0.0, -5.0, -5.0, -5.0});
+		o2.setConnections(allNeurons, new double[] {-5.0, -5.0, 5.0, 20.0, 20.0, 0.0, 0.0});
+		o3.setConnections(allNeurons, new double[] {-25.0, 5.0, 5.0, 5.0, 7.0, 10.0, 10.0});
+
+		// set coordinates for visualisation
 		setNeuronCoordinates();
 
 	}
@@ -116,7 +131,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 			writeInstructions();
 		}
 		
-		for (int neuronIndex = 0; neuronIndex<8; neuronIndex++) {
+		for (int neuronIndex = 0; neuronIndex<nN; neuronIndex++) {
 			plotNeuron(neuronIndex);
 		}
 		
@@ -163,7 +178,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 		 * set this.mouseOver to neuronIndex
 		 */
 		
-		for (int i=0; i<8; i++) {
+		for (int i=0; i<nN; i++) {
 			Neuron n = network.getNeuron(i);
 			if (mouseX <= n.getX()+NwFixed && mouseX >= n.getX() && mouseY <= n.getY()+NwFixed  && mouseY >= n.getY()) {
 				this.mouseOver = i;
@@ -181,19 +196,26 @@ public class TestOscillatoryBehaviour extends PApplet {
 	private void setNeuronCoordinates() {
 		
 		
-		// set coordinates for output neurons
+		// set coordinates for second layer neurons
 		for (int i=0; i<7; i++) {
 			Neuron neuron = network.getNeuron(i);
 			neuron.setX(3*this.Nw+this.iN);
 			if (this.Nw <=50) neuron.setY(i*this.Nw+this.iN+10);
 			else neuron.setY(i*this.Nw+this.iN);
-			//System.out.println("Neuron "+i+": ("+neuron.getX()+", "+neuron.getY()+")");
 		}
 		
 		// set coordinates for input neuron
 		Neuron neuron = network.getNeuron(7);
 		neuron.setX(this.iN);
 		neuron.setY(network.getNeuron(3).getY());
+		
+		// set coordinates for output neurons
+		for (int i=8; i<nN; i++) {
+			neuron = network.getNeuron(i);
+			neuron.setX(6*this.Nw+this.iN);
+			if (this.Nw <=50) neuron.setY((i-6)*this.Nw+this.iN+10);
+			else neuron.setY((i-6)*this.Nw+this.iN);
+		}
 	}
 	
 	private void changeNeuronParams(int neuronIndex) {
@@ -212,7 +234,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 			pause = true;
 			changeNeuronParams(mouseOver);		// change parameters neuron
 			// reset time and number of spikes
-			for (int i=0; i<8; i++) {
+			for (int i=0; i<nN; i++) {
 				network.getNeuron(i).t = 0.0;
 				network.getNeuron(i).nSpikes = 0;
 			}
@@ -246,6 +268,8 @@ public class TestOscillatoryBehaviour extends PApplet {
 		if (key == ' ') pause = pause ? false : true;
 		
 		if (key == 's') noShift = noShift ? false : true;
+		
+		if (key == 'f') makeScreenShot();
 	}
 	
 	public void display(NeuralNetwork network) {
@@ -276,7 +300,6 @@ public class TestOscillatoryBehaviour extends PApplet {
 	    textSize(15);
 	    neuronAv = (int) neuron.averageSpikePeriod();
 	    textAlign(CENTER);
-	    System.out.println(neuronAv);
 	    text(neuronAv, x+14, y+20);
 	}
 	
@@ -290,22 +313,26 @@ public class TestOscillatoryBehaviour extends PApplet {
 		scaleX = 1.2; scaleY = 0.8;		// initialise scaling data
 
 		// fill baseShift
-		baseShift = new float[8];
-		baseShift[7] = Nw_p+20; for (int i=0; i<7; i++) baseShift[i] = 4*Nw_p+20;
+		baseShift = new float[nN];
+		baseShift[7] = Nw_p+20;
+		for (int i=0; i<7; i++) baseShift[i] = 4*Nw_p+20;
+		for (int i=8; i<11; i++) baseShift[i] = 7*Nw_p+20;
 		// initialise shiftX array
 		shiftX = baseShift.clone();
 		// set shiftY value
-		shiftY = new float[8];
-		shiftY[7] = (float) (3.5*Nw_p+this.iN); for (int i=0; i<7; i++) shiftY[i] = (float) (i*Nw_p+this.iN+0.5*Nw_p);
+		shiftY = new float[nN];
+		shiftY[7] = (float) (3.5*Nw_p+this.iN);
+		for (int i=0; i<7; i++) shiftY[i] = (float) (i*Nw_p+this.iN+0.5*Nw_p);
+		for (int i=8; i<11; i++) shiftY[i] = (float) ((i-6)*Nw_p+this.iN+0.5*Nw_p);
 		
 		// create curShift
-		curShift = new float[8];
+		curShift = new float[nN];
 
 		// create curIndex, prevIndex
-		curIndex = new int[8];
-		for (int i=0; i<8; i++) curIndex[i] = 0;
-		prevIndex = new int[8];
-		for (int i=0; i<8; i++) curIndex[i] = -1;
+		curIndex = new int[nN];
+		for (int i=0; i<nN; i++) curIndex[i] = 0;
+		prevIndex = new int[nN];
+		for (int i=0; i<nN; i++) curIndex[i] = -1;
 
 	}
 
@@ -333,7 +360,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 		if (Nw < 50) {
 			size(10*Nw, 10*Nw);
 		} else {
-			size(7*Nw, 7*Nw+20);
+			size(11*Nw, 7*Nw+30);
 		}
 	}
 	
@@ -343,19 +370,28 @@ public class TestOscillatoryBehaviour extends PApplet {
 						"Press x or q to ext simulation\n" +
 						"Press +\\- to change the speed of the simulation\n" +
 						"Press p to toggle v/t-plot\n" +
+						"Press f to make screenshot\n" +
 						"Press s to toggle shift/redraw mode of v/t-plot\n" +
 						"(using shift-mode may slow down the simlation significantly";
 		fill(0);
 		textAlign(LEFT);
-		text(instr, 10, this.height-80);
+		text(instr, 10, this.height-100);
+	}
+	
+	private void makeScreenShot() {
+		pause = true;
+		save("../graphs/screenshot"+screenshotNr+".jpg");
+		JOptionPane.showMessageDialog(frame, "Screenshot written to graphs/screenshot"+screenshotNr+".jpg\nPress ok to continue simulation.");
+		screenshotNr ++;
+		pause=false;
 	}
 
 	private void resetPlotData() {
 		// set all values back as if plotting just started
 		// fill first element of array with current values
 		curTime = 0;
-		plt = new float[8][simLength][2];
-		for (int i=0; i<8; i++) {
+		plt = new float[nN][simLength][2];
+		for (int i=0; i<nN; i++) {
 			curIndex[i] = 0;	// reset current index
 			plt[i][0][0] = curTime;		// reset plot data
 			plt[i][0][1] = (float) network.getNeuron(i).v;
