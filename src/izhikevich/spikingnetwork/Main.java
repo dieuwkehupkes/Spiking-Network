@@ -49,7 +49,7 @@ public class Main {
 		System.out.println("plt.show()");
 	}
 	
-	public static void plotSpikePeriodT() {
+	public static void plotSpikePeriodSpikes() {
 		float I = 10;
 		double a = 0.01; double b =0.2; int c = -65;
 		double[] dList = new double[] {1.01, 1.75, 2.63, 3.63, 4.83, 6.11, 7.54};
@@ -78,6 +78,40 @@ public class Main {
 		System.out.println("\"Development of spikeperiod with number of spikes\"");
 		System.out.println("plt.text(30, 7, \"a = 0.01\\nb = 0.2\\nc = -65\")");
 		System.out.println("plt.axis([0, 40, 0, 90])");
+		System.out.println("plt.show()");
+	}
+
+	public static void plotSpikePeriodT() {
+		float I = 10;
+		double a = 0.01; double b =0.2; int c = -65;
+		double[] dList = new double[] {1.01, 1.75, 2.63, 3.63, 4.83, 6.11, 7.54};
+		int simLength = 5000;
+		for (double d: dList) {
+			double fireTime = 0;
+			String dValue = String.format("%.2f",  d);
+			String varName = "y"+dValue.replace(",", "");
+			Neuron n = new Neuron(a, b, c, d);
+			System.out.print(varName + "= np.array([");
+			for (int i=0; i<simLength; i++) {
+				n.update(I);
+				if (n.fired) {
+					if (fireTime != 0) {
+						System.out.print(n.lastTimeFired-fireTime+", ");
+					}
+					fireTime = n.lastTimeFired;
+				}
+			}
+			System.out.println("])");
+			String xName = "x"+dValue.replace(",", "");
+			System.out.println(xName+ "= "+varName+".cumsum()");
+			System.out.println("plt.plot("+xName+ ", "+varName+", label=\"d = "+d+"\", linewidth=1.5)");
+		}
+		System.out.println("plt.legend(loc=1)");
+		System.out.println("plt.ylabel(\"Inter spike time\")");
+		System.out.println("plt.xlabel(\"t\")");
+		System.out.println("\"Development of spikeperiod with number of spikes\"");
+		System.out.println("plt.text(300, 7, \"a = 0.01\\nb = 0.2\\nc = -65\")");
+		System.out.println("plt.axis([0, 500, 0, 90])");
 		System.out.println("plt.show()");
 	}
 	
