@@ -1,6 +1,7 @@
 package izhikevich.spikingnetwork;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import izhikevich.spikingnetwork.neuron.Neuron;
 import processing.core.*;
@@ -380,8 +381,16 @@ public class TestOscillatoryBehaviour extends PApplet {
 	
 	private void makeScreenShot() {
 		pause = true;
-		save("../graphs/screenshot"+screenshotNr+".jpg");
-		JOptionPane.showMessageDialog(frame, "Screenshot written to graphs/screenshot"+screenshotNr+".jpg\nPress ok to continue simulation.");
+		String defaultName = "../graphs/screenshot"+String.format("%02d", screenshotNr)+".jpg";
+		JTextField storeTo = new JTextField(defaultName);
+		Object[] message = {"Save screenshot to", storeTo,""};
+		int out = JOptionPane.showConfirmDialog(null, message, "", JOptionPane.OK_OPTION);
+		
+		if (out == JOptionPane.OK_OPTION) {
+			// maybe some check here if the extention makes sense
+			save(storeTo.getText());
+		}
+		
 		screenshotNr ++;
 		pause=false;
 	}
