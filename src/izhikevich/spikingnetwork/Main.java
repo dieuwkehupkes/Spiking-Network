@@ -14,7 +14,7 @@ public class Main {
 		// FindReactions.main("izhikevich.spikingnetwork.FindReactions");
 		// PlotNeuron.main("izhikevich.spikingnetwork.PlotNeuron");
 		
-		plotSpikePeriodT();
+		plotSpikePeriodSpikes();
 
 	}
 	
@@ -60,6 +60,7 @@ public class Main {
 			String varName = "y"+dValue.replace(",", "");
 			Neuron n = new Neuron(a, b, c, d);
 			System.out.print(varName + "= [0, ");
+			for (int i=0; i<500; i++) n.update();
 			for (int i=0; i<simLength; i++) {
 				n.update(I);
 				if (n.fired) {
@@ -75,7 +76,7 @@ public class Main {
 		System.out.println("plt.legend(loc=1)");
 		System.out.println("plt.ylabel(\"Inter spike time\")");
 		System.out.println("plt.xlabel(\"# spikes\")");
-		System.out.println("\"Development of spikeperiod with number of spikes\"");
+		System.out.println("plt.title(\"Development of spikeperiod with number of spikes\")");
 		System.out.println("plt.text(30, 7, \"a = 0.01\\nb = 0.2\\nc = -65\")");
 		System.out.println("plt.axis([0, 40, 0, 90])");
 		System.out.println("plt.show()");
