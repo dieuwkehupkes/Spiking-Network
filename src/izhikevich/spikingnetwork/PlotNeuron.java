@@ -44,15 +44,18 @@ public class PlotNeuron extends PApplet {
 	float curShift = (float) (-0.1*simLength);
 	int from, to;
 	
-	boolean keyP = true;
+	boolean pause = false;
+	boolean plotStateSpace = false;
+	int simulationSpeed = 150;
 	
 	
 	public void setup() {
 
 		size(250, 200);
+		if (frame != null) frame.setResizable(true);		// allow reseizing of screen
 		background(255);
 		fill(50);
-		frameRate(100);
+		frameRate(simulationSpeed);
 		//textSize(textSize);
 		text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
 
@@ -71,7 +74,7 @@ public class PlotNeuron extends PApplet {
 
 	public void draw() {
 		
-		if (! keyP) {
+		if (! pause) {
 			return;
 		}
 		
@@ -163,9 +166,15 @@ public class PlotNeuron extends PApplet {
 	}
 		
 	public void keyPressed() {
-		if (key == ' ') keyP = keyP ? false : true;
+		if (key == ' ') pause = pause ? false : true;
 		if (key == 'q' || key == 'x') exit();
 		if (key == 'n' ) getUserInput();
+		if (key == 'p') plotStateSpace = plotStateSpace ? false : true;
+		if (key=='+'|| key=='-') {    // change simulationspeed
+			simulationSpeed = (key=='+') ? simulationSpeed+5 : Math.abs(simulationSpeed -5);    //change speed
+			System.out.println("New framerate: "+simulationSpeed);
+			frameRate(simulationSpeed);
+		}
 	}
 	
 	public void keyReleased() {
