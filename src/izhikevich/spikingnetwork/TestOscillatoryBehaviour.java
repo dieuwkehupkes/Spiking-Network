@@ -251,8 +251,7 @@ public class TestOscillatoryBehaviour extends PApplet {
 	public void keyPressed() {
 		// specify what happens when a key is pressed
 		if (key=='+'|| key=='-') {    // change simulationspeed
-			simulationSpeed = (key=='+') ? simulationSpeed+5 : simulationSpeed -5;    //change speed
-			if (simulationSpeed <=0) simulationSpeed = 1;
+			simulationSpeed = (key=='+') ? simulationSpeed+5 : Math.abs(simulationSpeed -5);    //change speed
 			System.out.println("new frameRate = "+ simulationSpeed);
 			frameRate(simulationSpeed);
 		}
