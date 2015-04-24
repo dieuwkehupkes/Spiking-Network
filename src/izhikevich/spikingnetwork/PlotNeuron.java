@@ -29,16 +29,24 @@ public class PlotNeuron extends PApplet {
 	Neuron n;
 	
 	// shift for neuron behaviour
-	float shiftX = 20;
-	float shiftY = 100;
-	double scaleX = 1.3;
-	double scaleY = 1.0;
-	int simLength = 1000;
+	float shiftXv = 20;
+	float shiftYv = 100;
+	double scaleXv = 1.3;
+	double scaleYv = 1.0;
+	float shiftXsS = 20;
+	float shiftYsS = 100;
+	double scaleXsS = 1.3;
+	double scaleYsS = 1.0;
+	int simLength = 1500;
+	int stateSpaceSimLength = 500;
 	
 	// create arrays to store data, assumes timestep taken is 0.1
-	float[][] plt = new float[simLength][2];
-	float[][] data = new float[simLength][2];
+	float[][] pltV = new float[simLength][2];
+	float[][] dataV = new float[simLength][2];
+	float[][] pltSs = new float[stateSpaceSimLength][2];
+	float[][] dataSs = new float[stateSpaceSimLength][2];
 	int curIndex = 0;	// index to fill plotdata
+	int curIndexSs = 0;	// index to plot statespace
 	int prevIndex = -1; //
 	float curTime = (float) 0.0;
 	float curShift = (float) (-0.1*simLength);
@@ -47,6 +55,8 @@ public class PlotNeuron extends PApplet {
 	boolean pause = false;
 	boolean plotStateSpace = false;
 	int simulationSpeed = 150;
+	boolean reDraw = false;
+	boolean pltSsFilled = false;
 	
 	
 	public void setup() {
@@ -64,8 +74,8 @@ public class PlotNeuron extends PApplet {
 		n.t = 0;
 		n.v = 35;
 		
-		plt[0][0] = 0;
-		plt[0][1] = (float) n.v;
+		pltV[0][0] = 0;
+		pltV[0][1] = (float) n.v;
 		
 		strokeWeight(1);
 		stroke(0);
@@ -74,7 +84,7 @@ public class PlotNeuron extends PApplet {
 
 	public void draw() {
 		
-		if (! pause) {
+		if (pause) {
 			return;
 		}
 		
@@ -85,13 +95,14 @@ public class PlotNeuron extends PApplet {
 	
 		// generate new datapoint
 		n.update(I);
-		plt[curIndex][0] = curTime;
-		plt[curIndex][1] = (float) n.v;
+		pltV[curIndex][0] = curTime;
+		pltV[curIndex][1] = (float) n.v;
 
+		if (curShift > 0 || pltSsFilled) reDraw = true;
 
 		if (curShift <= 0) {	// if curShift <= 0, plot next datapoint and return
-			data = Collection.shift_and_scale(plt, shiftX, shiftY, scaleX, scaleY);
-			line(data[prevIndex][0], data[prevIndex][1], data[curIndex][0], data[curIndex][1]);
+			dataV = Collection.shift_and_scale(pltV, shiftXv, shiftYv, scaleXv, scaleYv);
+			line(dataV[prevIndex][0], dataV[prevIndex][1], dataV[curIndex][0], dataV[curIndex][1]);
 			return;
 		}
 
@@ -100,17 +111,16 @@ public class PlotNeuron extends PApplet {
 		text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
 		
 		// update x-shift factor
-		shiftX -= 0.1;
+		shiftXv -= 0.1;
 		
 		// rescale data and plot
-		float[][] data = Collection.shift_and_scale(plt,  shiftX, shiftY, scaleX, scaleY);
+		float[][] data = Collection.shift_and_scale(pltV,  shiftXv, shiftYv, scaleXv, scaleYv);
 		
 		for (int i = 1; i<simLength; i++) {
 			from = (i+curIndex) % simLength;
 			to = (from +1) % simLength;
 			line(data[from][0], data[from][1], data[to][0], data[to][1]);
 		}
-
 		
 	}
 	
@@ -152,12 +162,42 @@ public class PlotNeuron extends PApplet {
 		}
 	}
 	
+	public void plotInit(boolean plot) {
+		background(255);
+		drawGrid();
+		if (plot) {
+			resetStateSpaceData();
+			size(500, 250);
+		} else {
+			size(250, 250);
+		}
+	}
+	
+	public void drawGrid() {
+		/**
+		 * Draw the grid for plotting the state space
+		 */
+		stroke(0);
+		fill(0);
+		point(10, 10);
+		rect(200, 10, 100, 100);
+		
+	}
+	
+	public void resetStateSpaceData() {
+		// reset the data for plotting the statespace
+		curIndexSs = 0;
+		pltSs = new float[stateSpaceSimLength][2];
+		pltSs[0][0] = (float) n.v;
+		pltSs[0][1] = (float) n.u;
+	}
+	
 	public void reset() {
 		// reset values to start plotting for new neuron
-		shiftX = 20;
+		shiftXv = 20;
 
-		plt = new float[simLength][2];
-		data = new float[simLength][2];
+		pltV = new float[simLength][2];
+		dataV = new float[simLength][2];
 		curIndex = 0;	// index to fill plotdata
 		curTime = (float) 0.0;
 		curShift = (float) (-0.1*simLength);
@@ -169,7 +209,10 @@ public class PlotNeuron extends PApplet {
 		if (key == ' ') pause = pause ? false : true;
 		if (key == 'q' || key == 'x') exit();
 		if (key == 'n' ) getUserInput();
-		if (key == 'p') plotStateSpace = plotStateSpace ? false : true;
+		if (key == 'p') {
+			plotStateSpace = plotStateSpace ? false : true;
+			plotInit(plotStateSpace);
+		}
 		if (key=='+'|| key=='-') {    // change simulationspeed
 			simulationSpeed = (key=='+') ? simulationSpeed+5 : Math.abs(simulationSpeed -5);    //change speed
 			System.out.println("New framerate: "+simulationSpeed);
