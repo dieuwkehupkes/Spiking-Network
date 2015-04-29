@@ -1,8 +1,5 @@
 package izhikevich.spikingnetwork;
 
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
 import izhikevich.spikingnetwork.neuron.Neuron;
 import processing.core.*;
 import izhikevich.spikingnetwork.Collection;
@@ -175,7 +172,6 @@ public class PlotNeuron extends PApplet {
 	private void getUserInput(double a, double b, double c, double d, double I) {
 		double[] out = Collection.getUserInputNeuron(a, b, c, d, I);
 		this.a = out[0]; this.b = out[1]; this.c = out[2]; this.d = out[3]; this.I = (float) out[4];
-		System.out.println("set a, b, c, d and I"+ a + " "+b+" " + c + " " + d + " " + I);
 		n = new Neuron(a, b, c, d);
 		reset();
 	}
@@ -200,7 +196,7 @@ public class PlotNeuron extends PApplet {
 		rect(rectStartX, rectStartY, rectSize, rectSize);
 		textSize(10);
 		textAlign(CENTER, CENTER);
-		text("u", rectStartX-30, gridDetails[10]);
+		text("u", rectStartX-30, gridDetails[10]+25);
 		text("v", gridDetails[5], gridDetails[1]+25);
 		// set x-coordinates
 		for (int i=0; i<=6; i++) {
