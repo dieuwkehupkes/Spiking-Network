@@ -30,16 +30,15 @@ public class PlotNeuron extends PApplet {
 	double scaleXv = 1.3;
 	double scaleYv = 1.0;
 	float shiftXsS; float shiftYsS;
-	double scaleXsS;
-	double scaleYsS;
+	double scaleXsS; double scaleYsS;
 	int simLength = 1500;
-	int stateSpaceSimLength = 50;
+	int stateSpaceSimLength = 60;
 	
 	// create arrays to store data, assumes timestep taken is 0.1
 	float[][] pltV = new float[simLength][2];
 	float[][] dataV = new float[simLength][2];
 	float[][] pltSs = new float[stateSpaceSimLength][2];
-	float[][] dataSs;
+	float[][] dataSs; float[][] dataVt;
 	int curIndex = 0;	// index to fill plotdata
 	int curIndexSs = 0;	// index to plot statespace
 	int prevIndex = -1; //
@@ -62,7 +61,7 @@ public class PlotNeuron extends PApplet {
 	
 	public void setup() {
 
-		size(250, 200);
+		size(500, 250);
 		if (frame != null) frame.setResizable(true);		// allow reseizing of screen
 		background(255);
 		fill(50);
@@ -106,7 +105,7 @@ public class PlotNeuron extends PApplet {
 			shiftXv -= 0.1*this.scaleXv;		// update shiftXv
 		}
 		
-		float[][] dataVt = Collection.shift_and_scale(pltV,  shiftXv, shiftYv, scaleXv, scaleYv);
+		this.dataVt = Collection.shift_and_scale(pltV,  shiftXv, shiftYv, scaleXv, scaleYv);
 
 		// compute shifted data for uv plot
 		if (plotStateSpace) {
@@ -117,16 +116,17 @@ public class PlotNeuron extends PApplet {
 
 		// redraw or continue, depending on whether redraw is true
 		if (reDraw) {
+
 			// redraw everything
 			background(255);
 			// text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
 
 			// plot vt
 			int end = this.counterVt > simLength ? simLength: this.counterVt;
-			for (int i=end-1; i>0; i--) {
-				from = (i+curIndex) % simLength;
+			for (int i=1; i<end; i++) {
+				from = (curIndex-i+simLength) % simLength;
 				to = (from+1) % simLength;
-				line(dataVt[from][0], dataVt[from][1], dataVt[to][0], dataVt[to][1]);
+				line(this.dataVt[from][0], this.dataVt[from][1], this.dataVt[to][0], this.dataVt[to][1]);
 			}
 				
 			// plot statespace
@@ -246,6 +246,7 @@ public class PlotNeuron extends PApplet {
 	
 	private void reset() {
 		// reset values to start plotting for new neuron
+		reDraw = false;
 		shiftXv = 20;
 
 		pltV = new float[simLength][2];
