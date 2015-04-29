@@ -13,10 +13,10 @@ public class PlotNeuron extends PApplet {
 	
 	// button for creating new neuron
 	float buttonPosX = 10;
-	float buttonPosY = 8;
+	float buttonPosY = 190;
 	float buttonWidth = 200;
-	float buttonHeight = 100;
-	String textString = "Press \"n\" to restart\nPress SPACE to pause";
+	float buttonHeight = 200;
+	String textString = "Press \"n\" to create new neuron\nPress SPACE to pause\npress \"p\" to toggle to statespace plot\npress \"x\" to exit";
 	boolean buttonOver = false;
 	
 	// parameters for neuron to be plotted
@@ -61,14 +61,15 @@ public class PlotNeuron extends PApplet {
 	
 	public void setup() {
 
-		size(500, 250);
+		size(500, 270);
 		if (frame != null) frame.setResizable(true);		// allow reseizing of screen
 		background(255);
 		fill(50);
 		frameRate(simulationSpeed);
 		setGridDetails();
-		//textSize(textSize);
-		// text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
+		textAlign(LEFT);
+		textSize(12);
+		text(textString, buttonPosX, buttonPosY);// , buttonWidth, buttonHeight);
 
 		getUserInput(0.01, 0.2, -65, 2, 10);
 
@@ -119,6 +120,9 @@ public class PlotNeuron extends PApplet {
 
 			// redraw everything
 			background(255);
+			textAlign(LEFT);
+			textSize(12);
+			text(textString, buttonPosX, buttonPosY); //, buttonWidth, buttonHeight);
 			// text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
 
 			// plot vt
@@ -177,13 +181,13 @@ public class PlotNeuron extends PApplet {
 	}
 	
 	public void plotInit(boolean plot) {
-		// background(255);
+		background(255);
 		if (plot) {
 			// resetStateSpaceData();
 			drawGrid();
-			size(500, 250);
+			size(500, 270);
 		} else {
-			size(250, 250);
+			size(250, 270);
 		}
 	}
 	
@@ -256,7 +260,9 @@ public class PlotNeuron extends PApplet {
 		curShift = (float) (-0.1*simLength);
 		resetStateSpaceData();
 		background(255);
-		// text(textString, buttonPosX, buttonPosY, buttonWidth, buttonHeight);
+		textAlign(LEFT);
+		textSize(12);
+		text(textString, buttonPosX, buttonPosY); //, buttonWidth, buttonHeight);
 	}
 		
 	public void keyPressed() {
