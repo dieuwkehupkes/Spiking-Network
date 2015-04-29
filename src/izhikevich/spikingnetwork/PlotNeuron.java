@@ -118,10 +118,6 @@ public class PlotNeuron extends PApplet {
 			if (counterSs == stateSpaceSimLength) reDraw = true;
 		}
 
-/*		for (float[] e : pltSs) {
-			System.out.print(e[0]+" "+e[1]);
-		}*/
-
 		// redraw or continue, depending on whether redraw is true
 		if (reDraw) {
 			// redraw everything
