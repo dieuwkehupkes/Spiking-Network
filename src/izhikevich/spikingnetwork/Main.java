@@ -7,47 +7,108 @@ public class Main {
 	 * 
 	 */
 	public static void main(String[] args) {
+
 		// Run one of the processing applications
 		// MakeGraph.main("izhikevich.spikingnetwork.MakeGraph");
 		//Visualise.main("izhikevich.spikingnetwork.Visualise");
-		// PlotNeuron.main("izhikevich.spikingnetwork.PlotNeuron");
 		// FindReactions.main("izhikevich.spikingnetwork.FindReactions");
-		// PlotNeuron.main("izhikevich.spikingnetwork.PlotNeuron");
+		//PlotNeuron.main("izhikevich.spikingnetwork.PlotNeuron");
+		// TestOscillatoryBehaviour.main("izhikevich.spikingnetwork.TestOscillatoryBehaviour");
 		
-		plotSpikePeriodSpikes();
-
+		System.out.println("plt.figure(1)");
+		System.out.println("plt.subplot(221)");
+		plotSpikePeriod("a", 0.01, 0.1, 0.01, "d", 0., 8.01, 0.1, 10, 0.0, 0.18, -55, 0, 1);
+		System.out.println("plt.axis([0, 8, 0, 100])");
+		System.out.println("plt.legend(loc="+2+")");
+		System.out.println("plt.subplot(222)");
+		plotSpikePeriod("a", 0.01, 0.1, 0.01, "d", 0., 8.01, 0.1, 10, 0.0, 0.18, -65, 0, 1);
+		System.out.println("plt.axis([0, 8, 0, 100])");
+		System.out.println("plt.subplot(223)");
+		plotSpikePeriod("a", 0.01, 0.1, 0.01, "d", 0., 8.01, 0.1, 10, 0.0, 0.25, -55, 0, 1);
+		System.out.println("plt.axis([0, 8, 0, 100])");
+		System.out.println("plt.subplot(224)");
+		plotSpikePeriod("a", 0.01, 0.1, 0.01, "d", 0., 8.01, 0.1, 10, 0.0, 0.25, -65, 0, 1);
+		System.out.println("plt.axis([0, 8, 0, 100])");
+		System.out.println("plt.show()");
+		// plotSpikePeriod("d", 1, 8, 1, "b", 0.11, 0.3, 0.01, 10, 0.1,0, -65, 0, 1);
+		//plotSpikePeriod("a", 0.01, 0.1, 0.01, "d", 0.0, 8.01, 0.1, 10, 0.1, 0.2, -65, 0, 2);
+		
 	}
 	
-	public static void plotSpikePeriodA() {
-		float I = 10;
-		double a;
-		double b = 0.2;
-		double c = -65;
-		double d;
+	public static void plotSpikeFrequency(String var1, double start1, double end1, double step1, String var2, double start2, double end2, double step2, double I, double a, double b, double c, double d, int legend_loc) {
+		plot("frequency", var1, start1, end1, step1, var2, start2, end2, step2, I, a, b, c, d, legend_loc);
+		
+	}
 
+	public static void plotSpikePeriod(String var1, double start1, double end1, double step1, String var2, double start2, double end2, double step2, double I, double a, double b, double c, double d, int legend_loc) {
+		plot("period", var1, start1, end1, step1, var2, start2, end2, step2, I, a, b, c, d, legend_loc);
+	}
+	
+	public static void plot(String plotVar, String var1, double start1, double end1, double step1, String var2, double start2, double end2, double step2, double I, double a, double b, double c, double d, int legend_loc) {
+		
 		int simLength = 20000;
 		
-		for (d = 1; d<=8; d++) {
-			String dValue = String.format("%.0f",  d);
-			String varName = "y"+dValue;
-			System.out.print(varName + "= [");
-			for (a=0.005; a<0.1; a+= 0.005){
-				Neuron n = new Neuron(a, b, c, d);
+		// print x variable
+		System.out.println("x=np.arange("+start2+", "+end2+", "+step2+")");
+		
+		// loop over var1
+		for (double i = start1; i<end1; i+=step1) {
+			String iValue = String.format("%.0f", i);
+			String varName = "y"+iValue;
+			System.out.print(varName+"= [");
+			for (double j = start2; j<end2; j+=step2) {
+				Neuron n = getNeuron(var1, i, var2, j, a, b, c, d);
 				int spikes = n.getNrOfSpikes(I, simLength);
+				//System.out.println("a= "+n.a()+" b= "+n.b()+" c= "+n.c()+" d= "+n.d()+ " nr of spikes: "+ spikes);
 				double simDuration = simLength*n.timeStep;
-				double spikePeriod = simDuration/(double)spikes;
-				System.out.print(String.format("%.2f", spikePeriod).replace(",",".")+", ");
+				double toPlot;
+				if (plotVar == "period") toPlot = simDuration/(double) spikes;
+				else if (plotVar == "frequency") toPlot = spikes/simDuration;
+				else toPlot = 0.0;
+				System.out.print(String.format("%.2f",  toPlot).replace(",",".")+", ");
 			}
 			System.out.println("]");
-			System.out.println("plt.plot(x, "+varName+", label=\"d = "+d+"\")");
+			System.out.println("plt.plot(x, "+varName+", label=\""+var1+" = "+String.format("%.2f", i).replace(",",".")+"\", linewidth=2)");
+
 		}
-		System.out.println("plt.legend(loc=1)");
-		System.out.println("plt.ylabel(\"Spike Period\")");
-		System.out.println("plt.xlabel(\"a\")");
-		System.out.println("plt.title(\"Spike period as function of a\")");
-		System.out.println("plt.text(0.015, 130, \"b = 0.2\\nc = -65\")");
-		System.out.println("plt.show()");
+
+		// System.out.println("plt.legend(loc="+legend_loc+")");
+		if (plotVar =="period") System.out.println("plt.ylabel(\"Spike Period\")\nplt.suptitle(\"Spike period as function of "+var2+"\", fontsize=20)");
+		else if (plotVar =="frequency") System.out.println("plt.ylabel(\"Spike Frequency\")\nplt.suptitle(\"Spike frequency as function of "+var2+"\", fontsize=20)");
+		System.out.println("plt.xlabel(\""+var2+"\")");
+		printSubTitle(var1, var2, a, b, c, d, I);
+		// System.out.println("plt.axis([0.14, 0.30, 0, 140])");
+		//System.out.println("plt.show()");
+		
+		
 	}
+	
+	private static void printSubTitle(String var1, String var2, double a, double b, double c, double d, double I) {
+		System.out.print("plt.title(\"");
+		if ((var1 == "a" && var2 == "b") || (var1=="b" && var2 =="a")) System.out.println("c = "+c+",  d = "+d+",  I = "+I+"\", fontsize=12)");
+		if ((var1 == "a" && var2 == "c") || (var1=="c" && var2 =="a")) System.out.println("b = "+b+",  d = "+d+",  I = "+I+"\", fontsize=12)");
+		if ((var1 == "a" && var2 == "d") || (var1=="d" && var2 =="a")) System.out.println("b = "+b+",  c = "+c+",  I = "+I+"\", fontsize=12)");
+		if ((var1 == "b" && var2 == "c") || (var1=="c" && var2 =="b")) System.out.println("a = "+a+",  d = "+d+",  I = "+I+"\", fontsize=12)");
+		if ((var1 == "b" && var2 == "d") || (var1=="d" && var2 =="b")) System.out.println("a = "+a+",  c = "+c+",  I = "+I+"\", fontsize=12)");
+		if ((var1 == "c" && var2 == "d") || (var1=="d" && var2 =="c")) System.out.println("a = "+a+",  b = "+b+",  I = "+I+"\", fontsize=10)");
+	}
+	
+	private static Neuron getNeuron(String var1, double val1, String var2, double val2, double a, double b, double c, double d) {
+		// return a neuron with the appropriate values
+		if (var1 == "a" && var2 == "b") return new Neuron(val1, val2, c, d);
+		else if (var1 == "a" && var2 == "c") return new Neuron(val1, b, val2, d);
+		else if (var1 == "a" && var2 == "d") return new Neuron(val1, b, c, val2);
+		else if (var1 == "b" && var2 == "a") return new Neuron(val2, val1, c, d);
+		else if (var1 == "b" && var2 == "c") return new Neuron(a, val1, val2, d);
+		else if (var1 == "b" && var2 == "d") return new Neuron(a, val1, c, val2);
+		else if (var1 == "c" && var2 == "a") return new Neuron(val2, b, val1, d);
+		else if (var1 == "c" && var2 == "b") return new Neuron(a, val2, val1, d);
+		else if (var1 == "c" && var2 == "d") return new Neuron(a, b, val1, val2);
+		else if (var1 == "d" && var2 == "a") return new Neuron(val2, b, c, val1);
+		else if (var1 == "d" && var2 == "b") return new Neuron(a, val2, c, val1);
+		else /*(var1 == "d" && var2 == "c")*/ return new Neuron(val2, b, val2, d);
+	}
+
 	
 	public static void plotSpikePeriodSpikes() {
 		float I = 10;
@@ -81,6 +142,7 @@ public class Main {
 		System.out.println("plt.axis([0, 40, 0, 90])");
 		System.out.println("plt.show()");
 	}
+
 
 	public static void plotSpikePeriodT() {
 		float I = 10;
@@ -119,6 +181,7 @@ public class Main {
 		System.out.println("plt.axis([0, 500, 0, 90])");
 		System.out.println("plt.show()");
 	}
+
 	
 	public static void getSpikes() {
 		float I=10;
