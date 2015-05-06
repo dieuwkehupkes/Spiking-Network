@@ -112,7 +112,7 @@ public class PlotNeuron extends PApplet {
 		if (plotStateSpace) {
 			this.dataSs = Collection.shift_and_scale(pltSs, shiftXsS, shiftYsS, scaleXsS, scaleYsS);
 			counterSs ++;
-			if (counterSs == stateSpaceSimLength) reDraw = true;
+			if (counterSs >= stateSpaceSimLength) reDraw = true;
 		}
 
 		// redraw or continue, depending on whether redraw is true
@@ -141,7 +141,7 @@ public class PlotNeuron extends PApplet {
 				
 				if (counterSs > stateSpaceSimLength) until = stateSpaceSimLength;
 				for (int i=1; i<until; i++) {
-					from = (i+curIndexSs) % stateSpaceSimLength;
+					from = (curIndexSs + stateSpaceSimLength - i) % stateSpaceSimLength;
 					to = (from +1) % stateSpaceSimLength;
 					line(dataSs[from][0], dataSs[from][1], dataSs[to][0], dataSs[to][1]);
 				}
@@ -176,7 +176,7 @@ public class PlotNeuron extends PApplet {
 	private void getUserInput(double a, double b, double c, double d, double I) {
 		double[] out = Collection.getUserInputNeuron(a, b, c, d, I);
 		this.a = out[0]; this.b = out[1]; this.c = out[2]; this.d = out[3]; this.I = (float) out[4];
-		n = new Neuron(a, b, c, d);
+		n = new Neuron(this.a, this.b, this.c, this.d);
 		reset();
 	}
 	
@@ -276,7 +276,11 @@ public class PlotNeuron extends PApplet {
 		if (key=='+'|| key=='-') {    // change simulationspeed
 			simulationSpeed = (key=='+') ? simulationSpeed+5 : Math.abs(simulationSpeed -5);    //change speed
 			frameRate(simulationSpeed);
+			System.out.println("New framerate: "+simulationSpeed);
 		}
+		if (key == 'u') System.out.println("u = "+n.u);
+		if (key == 'v') System.out.println("v = "+n.v);
+		if (key == 'b') System.out.println("u = "+n.u+"\nv = "+n.v);
 	}
 	
 	public void keyReleased() {
